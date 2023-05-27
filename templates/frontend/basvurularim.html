@@ -36,10 +36,11 @@
       </tr>
       {% endfor %}
     </tbody>
+    {% else %}
+    <p>Henüz bir başvurunuz bulunmamaktadır.</p>
+  {% endif %}
   </table>
-  {% else %}
-  <p>Henüz bir başvurunuz bulunmamaktadır.</p>
-{% endif %}
+
 
   
 {% endblock profil %} 

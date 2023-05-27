@@ -17,9 +17,31 @@ mysql = MySQL(app)
 def main():
     return render_template("frontend/main.html")
 
-@app.route("/contact")
+@app.route("/contact", methods=["GET", "POST"])
 def contact():
-    return render_template("frontend/contact.html")
+    if request.method == "POST":
+        # Mesaj gönderme işlemleri
+
+        # Mesaj gönderildi bildirimini göster
+        message = "Mesaj gönderildi"
+        return render_template("frontend/contact.html", notification=message)
+    
+    return render_template("frontend/contact.html", notification=None)
+
+@app.route("/save_contact", methods=["POST"])
+def save_contact():
+    name = request.form['name']
+    email = request.form['email']
+    subject = request.form['subject']
+    message = request.form['message']
+
+    cursor = mysql.connection.cursor()
+    sorgu = "INSERT INTO tbl_messages (name, email, subject, message) VALUES (%s, %s, %s, %s)"
+    cursor.execute(sorgu, (name, email, subject, message))
+    mysql.connection.commit()
+    cursor.close()
+
+    return redirect(url_for('contact'))
 
 @app.route("/blog")
 def blog():
@@ -42,11 +64,17 @@ def basvurularim():
 
 @app.route("/sorularim")
 def sorularim():
-    return render_template("frontend/sorularim.html")
+    if 'user_id' in session:
+        return render_template("frontend/sorularim.html")
+    else:
+        return redirect(url_for('login'))
 
 @app.route("/profilayar")
 def profilayar():
-    return render_template("frontend/profilayar.html")
+    if 'user_id' in session:
+        return render_template("frontend/profilayar.html")
+    else:
+        return redirect(url_for('login'))
 
 @app.route("/donusum")
 def donusum():
