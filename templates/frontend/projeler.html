@@ -1,0 +1,98 @@
+{% extends "frontend/layout.html" %}
+{% block title %} Tip Projeler {% endblock title %}
+
+
+{% block icerik %} 
+      <!-- Hero Section-->
+
+      <!-- FAQ Section-->
+      <section>
+        
+        <div class="container">
+          <header>
+
+            
+          <div class="jumbotron">
+            <h1>Tip Projeler</h1>
+            <!--<p><a href="#" class="btn btn-primary btn-large">Profil Düzenle »</a> </p>-->
+          </div>
+          </header>
+          
+          <div class="row"> 
+                 <!-- sidebar-->
+
+
+          <aside class="sidebar col-lg-3 mt-5 mt-lg-0">
+
+            <div class="sidebar-widget mb-4">
+              <div class="flowers-wrap">
+                <p><strong>Plan Türü</strong></p>
+                <form>
+                  <label><input type="checkbox" name="fl-colour" value="red" id="red" /> Tek Katlı Müstakil Ev </label><br>
+                  <label><input type="checkbox" name="fl-colour" value="yellow" id="yellow" /> Dubleks Müstakil Ev</label><br> 
+                  <label><input type="checkbox" name="fl-colour" value="pink" id="pink" /> Villa</label><br>                     
+                  <label><input type="checkbox" name="fl-colour" value="purple" id="purple" /> TinyHouse</label><br>
+                </form>
+                <p><strong>Yapı Sınıfı</strong></p>
+                <form>
+                  <label><input type="checkbox" name="fl-size" value="tiny" id="tiny" /> Betonarme</label><br>
+                  <label><input type="checkbox" name="fl-size" value="small" id="small" /> Çelik</label><br>
+                  <label><input type="checkbox" name="fl-size" value="medium" id="medium" /> Prefabrik</label><br> 
+                  <label><input type="checkbox" name="fl-size" value="large" id="large" /> Ahşap</label><br>
+                </form>  
+                <p><strong>Oda Sayısı</strong></p>
+                <form>
+                  <div><input type="checkbox" name="fl-cont" value="africa" id="africa" /> 1+0</div>
+                  <div><input type="checkbox" name="fl-cont" value="europe" id="europe" /> 1+1</div>
+                  <div><input type="checkbox" name="fl-cont" value="asia" id="asia" /> 2+1</div>
+                  <div><input type="checkbox" name="fl-cont" value="north-america" id="north-america" /> 3+1</div>
+                  <div><input type="checkbox" name="fl-cont" value="south-america" id="south-america" /> 4+1</div>
+                 
+                </form>
+              </div>
+              
+            
+            </div>
+
+          </aside>
+
+          <!-- icerik kismi-->
+          <div class="col-lg-8">  
+
+
+            <div class="flowers">
+              <div class="flower" data-id="aloe" data-category="green small medium africa">Aloe</div>
+              <div class="flower" data-id="lavendar" data-category="purple green medium africa europe">Lavender</div>
+              <div class="flower" data-id="stinging-nettle" data-category="green large africa europe asia">Stinging Nettle</div>
+              <div class="flower" data-id="gorse" data-category="green yellow large europe">Gorse</div>  
+              <div class="flower" data-id="hemp" data-category="green large asia">Hemp</div>  
+              <div class="flower" data-id="titan-arum" data-category="purple other giant asia">Titan Arum</div>  
+              <div class="flower" data-id="golden-wattle" data-category="green yellow large australasia">Golden Wattle</div>  
+              <div class="flower" data-id="purple-prairie-clover" data-category="purple green other medium north-america">Purple Prairie Clover</div> 
+              <div class="flower" data-id="camellia" data-category="pink other large north-america">Camellia</div> 
+              <div class="flower" data-id="scarlet-carnation" data-category="red medium north-america">Scarlet Carnation</div> 
+              <div class="flower" data-id="indian-paintbrush" data-category="red medium north-america">Indian Paintbrush</div>  
+              <div class="flower" data-id="moss-verbena" data-category="purple other small south-america">Moss Verbena</div>  
+              <div class="flower" data-id="climbing-dayflower" data-category="blue tiny south-america">Climbing Dayflower</div>  
+              <div class="flower" data-id="antarctic-pearlwort" data-category="green yellow large antarctica">Antarctic Pearlwort</div>                 	
+            </div>
+
+            {% block profil %} 
+
+            {% endblock profil %} 
+
+            
+          
+
+            
+
+          </div>
+          </div>
+
+     
+ 
+        </div>
+      </section>
+  
+    {% endblock icerik %} 
+    

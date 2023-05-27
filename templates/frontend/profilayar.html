@@ -1,0 +1,50 @@
+{% extends "frontend/profil.html" %}
+{% block title %} Profil Ayarlarım {% endblock title %}
+
+
+{% block profil %} 
+
+
+<header class="section header mb-5">
+    <h2>Kullanıcı Ayarlarım</h2>
+    <p class="lead">Bu alanda kişisel bilgilerinizi düzenleyebilirsiniz.</p>
+  </header>
+
+
+
+  <form action="/hesap" method="post"  class="login-form text-left" >
+    <div class="form-row">
+      <div class="form-group col-md-5">
+        <label for="inputTC">T.C. Kimlik No: </label>
+        <input type="number" class="form-control" name="reg_tc" placeholder="T.C. Kimlik Numarası">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-5">
+        <label for="inputPassword4">Cep Telefonu</label>
+        <input type="number" class="form-control" name="reg_tel" placeholder="Telefon">
+      </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-5">
+          <label for="inputTC">E Posta</label>
+          <input type="number" class="form-control" name="reg_tc" placeholder="Email">
+        </div>
+      </div>
+    <div class="form-row">
+        <div class="form-group col-md-5">
+          <label for="inputPassword4">Şifre</label>
+          <input type="number" class="form-control" name="reg_tel" placeholder="Şifre">
+        </div>
+      </div>
+    
+
+  
+  
+ 
+    <input type="submit" value="Başvur" class="btn btn-primary" />
+  </form>
+
+  
+{% endblock profil %} 
+    

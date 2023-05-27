@@ -1,0 +1,59 @@
+{% extends "frontend/layout.html" %}
+{% block title %} Kayıt {% endblock title %}
+
+
+{% block icerik %} 
+
+<section class="hero loadercontent">
+    <div class="container mb-5">
+      <h1 class="hero-heading mb-0 mobcenter">KAYIT</h1>
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          
+          <div class="row">
+            <div class="col-lg-10">
+              <p class="lead text-muted mt-4 mb-4 mobcenter">KULLANICI TİPİ</p>
+            </div>
+          </div>
+
+          <form action="/register" method="post"  class="login-form text-left" >
+          
+            
+            <div class="form-group mb-4 mobcenter">
+              <label>İsim-Soyisim</label>
+              <input class="form-control" type="text" placeholder="İsim" name="reg_name" value="" required="required" />
+            </div>
+            <div class="form-group mb-4 mobcenter">
+              <label>T.C. Kimlik No</label>
+              <input class="form-control" type="number" placeholder="" name="reg_tc" value="" required="required" />
+            </div>
+            <div class="form-group mb-4 mobcenter">
+              <label>Doğum Tarihi</label>
+              <input class="form-control" type="number" placeholder="" name="reg_dogum" value="" required="required" />
+            </div>
+            <div class="form-group mb-4 mobcenter">
+              <label>Telefon</label>
+              <input class="form-control" type="number" placeholder="" name="reg_tel" value="" required="required" />
+            </div>
+            <div class="form-group mb-4 mobcenter">
+              <label>E-Mail</label>
+              <input class="form-control" type="email" placeholder="E-Posta" name="reg_email" value="" required="required" />
+            </div>
+            <div class="form-group mb-4 mobcenter">
+              <label>Şifre</label>
+              <input class="form-control" type="password" placeholder="Şifre" name="reg_pass1" required="required" />
+            </div>
+
+
+            <div class="form-group mobcenter">
+              <input type="submit" value="KAYIT" class="btn btn-primary" />
+            </div>
+          </form>
+        </div>
+        <div class="col-lg-6"><img src="{{ url_for('static', filename='front/img/add_user.svg') }}" class="hero-image img-fluid d-none d-lg-block" /></div>
+      </div>
+    </div>
+  </section>
+
+{% endblock icerik %} 
+    

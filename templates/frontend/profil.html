@@ -1,0 +1,60 @@
+{% extends "frontend/layout.html" %}
+{% block title %} Ev Maliyet Hesabı {% endblock title %}
+
+
+{% block icerik %} 
+      <!-- Hero Section-->
+
+      <!-- FAQ Section-->
+      <section>
+        
+        <div class="container">
+          <header>
+
+            
+          <div class="jumbotron">
+            <h1>Sana Özel</h1>
+            <!--<p><a href="#" class="btn btn-primary btn-large">Profil Düzenle »</a> </p>-->
+          </div>
+          </header>
+          
+          <div class="row"> 
+                 <!-- sidebar-->
+
+
+          <aside class="sidebar col-lg-3 mt-5 mt-lg-0">
+
+            <div class="sidebar-widget mb-4">
+              <h4 class="sidebar-widget-heading">Menü</h4>
+              <ul class="list-unstyled pl-0 mt-4">
+                <li> <a href="basvurularim" class="categories-link">Başvurularım</a></li>
+                <li><a href="sorularim" class="categories-link">Soru ve Taleplerim</a></li>
+                <li><a href="profilayar" class="categories-link">Kullanıcı bilgilerim »</a></li>
+
+              </ul>
+            </div>
+
+          </aside>
+
+          <!-- icerik kismi-->
+          <div class="col-lg-8">  
+
+            {% block profil %} 
+
+            {% endblock profil %} 
+
+            
+          
+
+            
+
+          </div>
+          </div>
+
+     
+ 
+        </div>
+      </section>
+  
+    {% endblock icerik %} 
+    

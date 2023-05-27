@@ -1,0 +1,105 @@
+{% extends "frontend/layout.html" %}
+{% block title %} Ev Maliyet Hesabı {% endblock title %}
+
+
+{% block icerik %} 
+      <!-- Hero Section-->
+
+      <!-- FAQ Section-->
+      <section>
+        <div class="container">
+          <div class="jumbotron">
+            <h1>Kentsel Dönüşüm Hesabı</h1>
+            <p>Bu alanda seçeceğiniz Tip projeyi kendi isteğinize ve bütçenize uygun şekilde özelleştirebilir .</p>
+            
+          </div>
+          <!-- wordPress installation-->
+          {% if session['reg_name'] %}
+          <header class="section header mb-5">
+            <h2>Daire Hak Oranı Hesaplama</h2>
+            <p class="lead">Bu alanda Dairenizin bulunduğu parseldeki hak oranını hesaplayabilirsiniz.</p>
+          </header>
+
+
+
+          <form action="/hesap" method="post"  class="login-form text-left" >
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputEmail4">T.C. Kimlik No:</label>
+                <input type="number" class="form-control" name="reg_tc" placeholder="T.C. Kimlik Numarası">
+              </div>
+            </div>
+              <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputPassword4">Cep Telefonu</label>
+                <input type="number" class="form-control" name="reg_tel" placeholder="Telefon">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label for="inputCity">Mahalle</label>
+                <input type="text" class="form-control" name="reg_mahalle">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="inputCity">Sokak</label>
+                <input type="text" class="form-control" name="reg_sokak">
+              </div>
+            
+              <div class="form-group col-md-2">
+                <label for="inputZip">Kapı No:</label>
+                <input type="number" class="form-control" name="reg_kapino">
+              </div>
+              <div class="form-group col-md-2">
+                <label for="inputZip">İç Kapı No:</label>
+                <input type="number" class="form-control" name="reg_ickapino">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-3">
+              <label for="inputAddress">Ada</label>
+              <input type="text" class="form-control" name="reg_ada" placeholder="">
+              </div>
+
+              <div class="form-group col-md-3">
+              <label for="inputAddress2">Parsel</label>
+              <input type="text" class="form-control" name="reg_parsel" placeholder="">
+              </div>
+            </div>
+          
+         
+            <input type="submit" value="Başvur" class="btn btn-primary" />
+          </form>
+
+          {% else %}
+
+
+          <header>
+            <!-- Navbar -->
+
+            <!-- Navbar -->
+          
+            <!-- Jumbotron -->
+            <div class="p-5 text-center bg-light">
+              <h2 class="mb-3">Giriş yapmanız gerekmektedir.</h2>
+              <h6 class="mb-3">Eğer kayıtlı iseniz Giriş Yapabilirsiniz.</h6>
+
+             
+                  <a href="register" class="btn btn-primary">Kayıt</a>
+              
+                  <a href="login" class="btn btn-primary">Giriş</a>
+            
+            <!-- Jumbotron -->
+          </header>
+
+      
+
+
+      
+
+          {% endif %}
+         
+        </div>
+      </section>
+  
+    {% endblock icerik %} 
+    

@@ -1,0 +1,152 @@
+{% extends "frontend/layout.html" %}
+{% block title %} Blog {% endblock title %}
+
+
+{% block icerik %} 
+    <!-- Hero Section-->
+    <section class="hero">
+      <div class="container text-center">
+        <nav aria-label="breadcrumb" class="d-flex justify-content-center">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html" class="animsition-link">Anasayfa</a></li>
+            <li aria-current="page" class="breadcrumb-item active">Maliyet Hesabı</li>
+          </ol>
+        </nav>
+        <h1>Text page</h1>
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <p class="lead text-muted">This is the lead paragraph of the article. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="container">
+        <!-- wordPress installation-->
+        <header class="section header mb-12">
+          <h2>Popüler Sorular</h2>
+          <p class="lead">Tarafımıza yöneltilen başlıca sorular ve cevapları.</p>
+        </header>
+        <div class="row"> 
+          <div class="col-lg-9">   
+            <div id="accordion" class="faq accordion accordion-custom pb-5">
+              <!-- question-->
+              <div class="card">
+                <div id="headingOne" class="card-header">
+                  <h4 class="mb-0 accordion-heading">
+                    <button data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-flex align-items-center"><i class="icon-light-bulb"></i><span>Evveko'yu kullanmaya nasıl başlayabilirim?</span></button>
+                  </h4>
+                </div>
+                <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordion" class="collapse show">
+                  <div class="card-body">Hemen sağ üstte yer alan KAYDOL butonuna tıklayıp gerekli bilgileri girdikten sonra ücretsiz olarak deneyebilirsiniz. Müteahhit olarak kendinize uygun bir abonelik modelini seçerek kullanıma başlayabilirsiniz.</div>
+                </div>
+              </div>
+              <!-- question        -->
+              <div class="card">
+                <div id="headingTwo" class="card-header">
+                  <h4 class="mb-0 accordion-heading">
+                    <button data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-flex align-items-center collapsed"><i class="icon-plug"></i><span> Wolf moon officia aute, non cupidatat?</span></button>
+                  </h4>
+                </div>
+                <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordion" class="collapse">
+                  <div class="card-body"><select class="form-select" multiple aria-label="multiple select example">
+                    <option selected>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select></div>
+                </div>
+              </div>
+              <!-- question-->
+              <div class="card">
+                <div id="headingThree" class="card-header">
+                  <h4 class="mb-0 accordion-heading">
+                    <button data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" class="d-flex align-items-center collapsed"><i class="icon-shield-settings"></i><span>Food truck quinoa nesciunt laborum?</span></button>
+                  </h4>
+                </div>
+                <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordion" class="collapse">
+                  <div class="card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.</div>
+                </div>
+              </div>
+              <!-- question            -->
+              <div class="card">
+                <div id="headingFour" class="card-header">
+                  <h4 class="mb-0 accordion-heading">
+                    <button data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" class="d-flex align-items-center collapsed"><i class="icon-stack-of-sheets"></i><span>Anim pariatur cliche reprehenderit?</span></button>
+                  </h4>
+                </div>
+                <div id="collapseFour" aria-labelledby="headingFour" data-parent="#accordion" class="collapse">
+                  <div class="card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
+                </div>
+              </div>
+            </div>
+            <!-- troubleshooting-->
+            <header class="section-header text-left mb-5 mt-5">
+              <h2 class="mt-5">Troubleshooting</h2>
+              <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
+            </header>
+            <div id="accordion2" class="faq accordion accordion-custom">
+              <!-- question-->
+              <div class="card">
+                <div id="headingOneAlt" class="card-header">
+                  <h4 class="mb-0 accordion-heading">
+                    <button data-toggle="collapse" data-target="#collapseOneAlt" aria-expanded="false" aria-controls="collapseOneAlt" class="d-flex align-items-center"><i class="icon-light-bulb"></i><span>Anim pariatur cliche reprehenderit?</span></button>
+                  </h4>
+                </div>
+                <div id="collapseOneAlt" aria-labelledby="headingOneAlt" data-parent="#accordion2" class="collapse">
+                  <div class="card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.</div>
+                </div>
+              </div>
+              <!-- question-->
+              <div class="card">
+                <div id="headingTwoAlt" class="card-header">
+                  <h4 class="mb-0 accordion-heading">
+                    <button data-toggle="collapse" data-target="#collapseTwoAlt" aria-expanded="true" aria-controls="collapseTwoAlt" class="d-flex align-items-center collapsed"><i class="icon-plug"></i><span> Wolf moon officia aute, non cupidatat?</span></button>
+                  </h4>
+                </div>
+                <div id="collapseTwoAlt" aria-labelledby="headingTwoAlt" data-parent="#accordion2" class="collapse show">
+                  <div class="card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.</div>
+                </div>
+              </div>
+              <!-- question-->
+              <div class="card">
+                <div id="headingThreeAlt" class="card-header">
+                  <h4 class="mb-0 accordion-heading">
+                    <button data-toggle="collapse" data-target="#collapseThreeAlt" aria-expanded="false" aria-controls="collapseThreeAlt" class="d-flex align-items-center collapsed"><i class="icon-shield-settings"></i><span>Food truck quinoa nesciunt?</span></button>
+                  </h4>
+                </div>
+                <div id="collapseThreeAlt" aria-labelledby="headingThreeAlt" data-parent="#accordion2" class="collapse">
+                  <div class="card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.</div>
+                </div>
+              </div>
+              <!-- question-->
+              <div class="card">
+                <div id="headingFourAlt" class="card-header">
+                  <h4 class="mb-0 accordion-heading">
+                    <button data-toggle="collapse" data-target="#collapseFourAlt" aria-expanded="false" aria-controls="collapseFourAlt" class="d-flex align-items-center collapsed"><i class="icon-stack-of-sheets"></i><span>Anim pariatur cliche reprehenderit?</span></button>
+                  </h4>
+                </div>
+                <div id="collapseFourAlt" aria-labelledby="headingFourAlt" data-parent="#accordion2" class="collapse">
+                  <div class="card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- sidebar-->
+          <aside class="sidebar col-lg-4 mt-5 mt-lg-0">
+            <div class="search mb-4">
+              <form action="#" class="search-form">
+                <div class="form-group">
+                  <input type="search" name="search" placeholder="Search" class="form-control">
+                  <button type="submit"> <i class="fa fa-search"></i></button>
+                </div>
+              </form>
+            </div>
+           
+
+          </aside>
+        </div>
+      </div>
+    </section>
+    {% endblock icerik %} 
+   
