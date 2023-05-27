@@ -1,5 +1,5 @@
-from flask import Flask, redirect, render_template, request, url_for, session
-from flask_mysqldb import MySQL, MySQLdb
+from flask import Flask, redirect, render_template, request, session, url_for
+from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
@@ -27,7 +27,18 @@ def blog():
 
 @app.route("/basvurularim")
 def basvurularim():
-    return render_template("frontend/basvurularim.html")
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        cursor = mysql.connection.cursor()
+        sorgu = "SELECT * FROM tbl_talep WHERE user_id = %s"
+        cursor.execute(sorgu, (user_id,))
+        basvurularim = cursor.fetchall()
+
+        return render_template("frontend/basvurularim.html", basvurularim=basvurularim)
+    else:
+        return redirect(url_for('login'))
+
 
 @app.route("/sorularim")
 def sorularim():
@@ -36,7 +47,6 @@ def sorularim():
 @app.route("/profilayar")
 def profilayar():
     return render_template("frontend/profilayar.html")
-
 
 @app.route("/donusum")
 def donusum():
@@ -51,113 +61,102 @@ def admin():
     return render_template("admin/main.html")
 
 @app.route("/profil")
-def profile():
-    return render_template("frontend/profil.html")
+def profil():
+    if 'user_id' in session:
+        return render_template("frontend/profil.html")
+    else:
+        return redirect(url_for('login'))
+
 
 @app.route("/projeler")
 def projeler():
     return render_template("frontend/projeler.html")
 
-
 # Mysql Kullanıcı Ekleme
-@app.route('/register', methods=["GET","POST"])
-def register():    
+@app.route('/register', methods=["GET", "POST"])
+def register():
     if request.method == 'GET':
         return render_template("frontend/register.html")
+    else:
+        reg_name = request.form.get('reg_name')
+        reg_tc = request.form.get('reg_tc')
+        reg_email = request.form.get('reg_email')
+        reg_tel = request.form.get('reg_tel')
+        reg_dogum = request.form.get('reg_dogum')
+        reg_pass1 = request.form.get('reg_pass1')
+        hash_regpass = bcrypt.generate_password_hash(reg_pass1)
 
-    else :
+        cursor = mysql.connection.cursor()
+        sorgu = "INSERT INTO tbl_user VALUES(NULL, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sorgu, (reg_name, reg_tc, reg_tel, reg_dogum, reg_email, hash_regpass))
+        mysql.connection.commit()
 
-      reg_name = request.form.get('reg_name')
-      reg_tc = request.form.get('reg_tc')
-      reg_email = request.form.get('reg_email')
-      reg_tel = request.form.get('reg_tel')
-      reg_dogum = request.form.get('reg_dogum')
-      reg_pass1 = request.form.get('reg_pass1')
-      hash_regpass = bcrypt.generate_password_hash(reg_pass1)
+        session['reg_name'] = reg_name
 
-
-      bcrypt.check_password_hash(hash_regpass, reg_pass1)
-
-      cursor = mysql.connection.cursor()
-
-      sorgu = "INSERT INTO tbl_user VALUES(%s,%s,%s,%s,%s,%s,%s)"
-
-      cursor.execute(sorgu,(None,reg_name,reg_tc,reg_tel,reg_dogum,reg_email,hash_regpass))
-      mysql.connection.commit()
-
-      session['reg_name'] = reg_name
-
-      return render_template("frontend/main.html")
+        return render_template("frontend/main.html")
 
 # Mysql Kullanıcı Giriş
-
 @app.route('/login', methods=["GET", "POST"])
 def login():
-        if request.method == "POST":
-            reg_email = request.form['reg_email']
-            reg_pass1 = request.form['reg_pass1']
-            hash_regpass = bcrypt.generate_password_hash(reg_pass1)
+    if request.method == "POST":
+        reg_email = request.form['reg_email']
+        reg_pass1 = request.form['reg_pass1']
 
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor = mysql.connection.cursor()
+        sorgu = "SELECT * FROM tbl_user WHERE user_email = %s"
+        cursor.execute(sorgu, (reg_email,))
+        user = cursor.fetchone()
+        cursor.close()
 
-            sorgu = "SELECT * FROM tbl_user WHERE user_email=%s"
-
-            cursor.execute(sorgu,(reg_email,))
-            reg_name = cursor.fetchone()
-            cursor.close()
-            
-
-            if len(reg_name) > 0:
-                if bcrypt.check_password_hash(hash_regpass, reg_pass1):
-                    
-                    session['reg_name'] = reg_name['user_name']
-                   
-
-                    return render_template("frontend/main.html",)
-            else:
-                return "hata"
+        if user and bcrypt.check_password_hash(user['user_pass'], reg_pass1):
+            session['reg_name'] = user['user_name']
+            session['user_id'] = user['user_id']
+            return render_template("frontend/main.html")
         else:
-                return render_template("frontend/login.html")  
+            return "Hatalı giriş bilgileri"
 
-# Mysql Kullanıcı Ekleme
-@app.route('/hesap', methods=["GET","POST"])
-def hesap():    
+    else:
+        return render_template("frontend/login.html")
+
+
+# Mysql Adres Ekleme
+@app.route('/hesap', methods=["GET", "POST"])
+def hesap():
     if request.method == 'GET':
         return render_template("frontend/hesap.html")
+    else:
+        user_id = request.form.get('user_id')
+        reg_tc = request.form.get('reg_tc')
+        reg_tel = request.form.get('reg_tel')
+        reg_mahalle = request.form.get('reg_mahalle')
+        reg_sokak = request.form.get('reg_sokak')
+        reg_kapino = request.form.get('reg_kapino')
+        reg_ickapino = request.form.get('reg_ickapino')
+        reg_ada = request.form.get('reg_ada')
+        reg_parsel = request.form.get('reg_parsel')
 
-    else :
+        # Sadece oturum açmış kullanıcının kimliğini alın
+        user_id = session['user_id']
 
-      reg_tc = request.form.get('reg_tc')
-      reg_tel = request.form.get('reg_tel')
-      reg_mahalle= request.form.get('reg_mahalle')
-      reg_sokak= request.form.get('reg_sokak')
-      reg_kapino = request.form.get('reg_kapino')
-      reg_ickapino = request.form.get('reg_ickapino')
-      reg_ada = request.form.get('reg_ada')
-      reg_parsel = request.form.get('reg_parsel')
+        cursor = mysql.connection.cursor()
+        sorgu = "INSERT INTO tbl_talep VALUES(NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sorgu, (user_id, reg_tc, reg_tel, reg_mahalle, reg_sokak, reg_kapino, reg_ickapino, reg_ada, reg_parsel))
+        mysql.connection.commit()
 
+        # Eklenen veriyi almak için yeni bir sorgu yapın
+        sorgu = "SELECT * FROM tbl_talep WHERE user_id = %s"
+        cursor.execute(sorgu, (user_id,))
+        basvurular = cursor.fetchall()
 
-      cursor = mysql.connection.cursor()
+        return render_template("frontend/basvurularim.html", basvurular=basvurular)
 
-      sorgu = "INSERT INTO tbl_talep VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-
-      cursor.execute(sorgu,(None,reg_tc,reg_tel,reg_mahalle,reg_sokak,reg_kapino,reg_ickapino,reg_ada,reg_parsel))
-      mysql.connection.commit()
-
-
-      return render_template("frontend/profil.html")   
 
 @app.route("/logout")
 def logout():
     session.clear()
-    return render_template("frontend/main.html")   
-
-
-
-
-
-
+    return render_template("frontend/main.html")
 
 if __name__ == '__main__':
     app.secret_key = 'f3cfe9ed8fae309f02079dbf'
-    app.run(debug = True)
+    app.run(debug=True)
+
