@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 
@@ -88,12 +88,20 @@ def faq():
 def admin():
     return render_template("admin/main.html")
 
-@app.route("/profil")
+@app.route('/profil')
 def profil():
-    if 'user_id' in session:
-        return render_template("frontend/profil.html")
-    else:
+    if 'user_id' not in session:
         return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    
+    cur = mysql.connection.cursor()
+    query = "SELECT user_name, user_email FROM tbl_user WHERE user_id = %s"
+    cur.execute(query, (user_id,))
+    user = cur.fetchone()
+    cur.close()
+    
+    return render_template('frontend/profil.html', user=user)
 
 
 @app.route("/projeler")
@@ -112,11 +120,11 @@ def register():
         reg_tel = request.form.get('reg_tel')
         reg_dogum = request.form.get('reg_dogum')
         reg_pass1 = request.form.get('reg_pass1')
-        hash_regpass = bcrypt.generate_password_hash(reg_pass1)
+        user_pass = bcrypt.generate_password_hash(reg_pass1)
 
         cursor = mysql.connection.cursor()
         sorgu = "INSERT INTO tbl_user VALUES(NULL, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sorgu, (reg_name, reg_tc, reg_tel, reg_dogum, reg_email, hash_regpass))
+        cursor.execute(sorgu, (reg_name, reg_tc, reg_tel, reg_dogum, reg_email, user_pass))
         mysql.connection.commit()
 
         session['reg_name'] = reg_name
@@ -183,6 +191,41 @@ def hesap():
 def logout():
     session.clear()
     return render_template("frontend/main.html")
+
+
+@app.route("/satinal")
+def satinal():
+    if 'user_id' in session:
+        return render_template("frontend/satinal.html")
+    else:
+        return redirect(url_for('login'))
+
+# Anakartları veritabanından çekme
+@app.route('/anakartlar')
+def get_anakartlar():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT anakart_id, marka, fiyat FROM anakartlar")
+    anakartlar = cur.fetchall()
+    cur.close()
+    return jsonify(anakartlar)
+
+# İşlemcileri veritabanından çekme
+@app.route('/islemciler/<int:anakart_id>')
+def get_islemciler(anakart_id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT id, marka, fiyat FROM islemciler WHERE anakart_id = %s", (anakart_id,))
+    islemciler = cur.fetchall()
+    cur.close()
+    return jsonify(islemciler)
+
+# Ramleri veritabanından çekme
+@app.route('/ramler/<int:islemci_id>')
+def get_ramler(islemci_id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT id, marka, fiyat FROM ramler WHERE islemci_id = %s", (islemci_id,))
+    ramler = cur.fetchall()
+    cur.close()
+    return jsonify(ramler)
 
 if __name__ == '__main__':
     app.secret_key = 'f3cfe9ed8fae309f02079dbf'

@@ -1,0 +1,72 @@
+{% extends "frontend/layout.html" %}
+{% block title %} Ev Maliyet Hesabı {% endblock title %}
+
+
+{% block icerik %} 
+      <!-- Hero Section-->
+
+      <!-- FAQ Section-->
+      <section>
+        
+        <div class="container">
+          <header>
+
+            
+          <div class="jumbotron">
+            <h1>Sana Özel</h1>
+            <!--<p><a href="#" class="btn btn-primary btn-large">Profil Düzenle »</a> </p>-->
+          </div>
+          </header>
+          
+          <div class="row"> 
+          
+
+          <!-- icerik kismi-->
+          <div class="col-lg-8">  
+
+            {% block profil %} 
+
+            <h1>Bilgisayar Toplama Simülasyonu</h1>
+
+            <h2>Anakart Seçimi</h2>
+            <select id="anakart">
+                <option value="">Anakart Seçin</option>
+                <!-- Anakartları veritabanından çekerek listele -->
+                {% for anakart in anakartlar %}
+                    <option value="{{ anakart.id }}">{{ anakart.marka }} - Fiyat: {{ anakart.fiyat }}</option>
+                {% endfor %}
+            </select>
+        
+            <h2>İşlemci Seçimi</h2>
+            <select id="islemci">
+                <option value="">İşlemci Seçin</option>
+            </select>
+        
+            <h2>RAM Seçimi</h2>
+            <select id="ram">
+                <option value="">RAM Seçin</option>
+            </select>
+        
+            <br><br>
+            <button id="sepete-ekle">Sepete Ekle</button>
+        
+            <div id="notification" style="display: none;"></div>
+
+
+            {% endblock profil %} 
+
+            
+          
+
+            
+
+          </div>
+          </div>
+
+     
+ 
+        </div>
+      </section>
+  
+    {% endblock icerik %} 
+    
