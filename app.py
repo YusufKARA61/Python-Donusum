@@ -36,8 +36,8 @@ def save_contact():
     message = request.form['message']
 
     cursor = mysql.connection.cursor()
-    sorgu = "INSERT INTO tbl_messages (name, email, subject, message) VALUES (%s, %s, %s, %s)"
-    cursor.execute(sorgu, (name, email, subject, message))
+    query = "INSERT INTO tbl_messages (name, email, subject, message) VALUES (%s, %s, %s, %s)"
+    cursor.execute(query, (name, email, subject, message))
     mysql.connection.commit()
     cursor.close()
 
@@ -53,8 +53,8 @@ def basvurularim():
         user_id = session['user_id']
 
         cursor = mysql.connection.cursor()
-        sorgu = "SELECT * FROM tbl_talep WHERE user_id = %s"
-        cursor.execute(sorgu, (user_id,))
+        query = "SELECT * FROM tbl_talep WHERE user_id = %s"
+        cursor.execute(query, (user_id,))
         basvurularim = cursor.fetchall()
 
         return render_template("frontend/basvurularim.html", basvurularim=basvurularim)
@@ -120,12 +120,13 @@ def register():
         reg_tel = request.form.get('reg_tel')
         reg_dogum = request.form.get('reg_dogum')
         reg_pass1 = request.form.get('reg_pass1')
-        user_pass = bcrypt.generate_password_hash(reg_pass1)
+        user_pass = bcrypt.generate_password_hash(reg_pass1).decode('utf-8')
 
         cursor = mysql.connection.cursor()
-        sorgu = "INSERT INTO tbl_user VALUES(NULL, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sorgu, (reg_name, reg_tc, reg_tel, reg_dogum, reg_email, user_pass))
+        query = "INSERT INTO tbl_user (user_name, user_tc, user_tel, user_dogum, user_email, user_pass) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (reg_name, reg_tc, reg_tel, reg_dogum, reg_email, user_pass))
         mysql.connection.commit()
+        cursor.close()
 
         session['reg_name'] = reg_name
 
@@ -139,8 +140,8 @@ def login():
         reg_pass1 = request.form['reg_pass1']
 
         cursor = mysql.connection.cursor()
-        sorgu = "SELECT * FROM tbl_user WHERE user_email = %s"
-        cursor.execute(sorgu, (reg_email,))
+        query = "SELECT * FROM tbl_user WHERE user_email = %s"
+        cursor.execute(query, (reg_email,))
         user = cursor.fetchone()
         cursor.close()
 
@@ -175,14 +176,17 @@ def hesap():
         user_id = session['user_id']
 
         cursor = mysql.connection.cursor()
-        sorgu = "INSERT INTO tbl_talep VALUES(NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sorgu, (user_id, reg_tc, reg_tel, reg_mahalle, reg_sokak, reg_kapino, reg_ickapino, reg_ada, reg_parsel))
+        query = "INSERT INTO tbl_talep (user_id, user_tc, user_tel, user_mahalle, user_sokak, user_kapino, user_ickapino, user_ada, user_parsel) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (user_id, reg_tc, reg_tel, reg_mahalle, reg_sokak, reg_kapino, reg_ickapino, reg_ada, reg_parsel))
         mysql.connection.commit()
+        cursor.close()
 
         # Eklenen veriyi almak için yeni bir sorgu yapın
-        sorgu = "SELECT * FROM tbl_talep WHERE user_id = %s"
-        cursor.execute(sorgu, (user_id,))
+        query = "SELECT * FROM tbl_talep WHERE user_id = %s"
+        cursor = mysql.connection.cursor()
+        cursor.execute(query, (user_id,))
         basvurular = cursor.fetchall()
+        cursor.close()
 
         return render_template("frontend/basvurularim.html", basvurular=basvurular)
 
@@ -192,24 +196,36 @@ def logout():
     session.clear()
     return render_template("frontend/main.html")
 
-
-@app.route("/satinal")
-def satinal():
-    if 'user_id' in session:
-        return render_template("frontend/satinal.html")
-    else:
-        return redirect(url_for('login'))
-
 # Anakartları veritabanından çekme
-@app.route('/anakartlar')
 def get_anakartlar():
     cur = mysql.connection.cursor()
     cur.execute("SELECT anakart_id, marka, fiyat FROM anakartlar")
     anakartlar = cur.fetchall()
     cur.close()
-    return jsonify(anakartlar)
+    anakartlar_list = []
+    for anakart in anakartlar:
+        anakart_dict = {
+            'anakart_id': anakart['anakart_id'],
+            'marka': anakart['marka'],
+            'fiyat': anakart['fiyat']
+        }
+        anakartlar_list.append(anakart_dict)
+    return anakartlar_list
 
-# İşlemcileri veritabanından çekme
+
+@app.route("/satinal")
+def satinal():
+    if 'user_id' in session:
+        anakartlar = get_anakartlar()  # Anakart verilerini al
+        if anakartlar:
+            return render_template("frontend/satinal.html", anakartlar=anakartlar)
+        else:
+            return "Satın alınabilecek anakart bulunmamaktadır."
+    else:
+        return redirect(url_for('login'))
+
+
+
 @app.route('/islemciler/<int:anakart_id>')
 def get_islemciler(anakart_id):
     cur = mysql.connection.cursor()
@@ -218,7 +234,6 @@ def get_islemciler(anakart_id):
     cur.close()
     return jsonify(islemciler)
 
-# Ramleri veritabanından çekme
 @app.route('/ramler/<int:islemci_id>')
 def get_ramler(islemci_id):
     cur = mysql.connection.cursor()
@@ -227,7 +242,7 @@ def get_ramler(islemci_id):
     cur.close()
     return jsonify(ramler)
 
+
 if __name__ == '__main__':
     app.secret_key = 'f3cfe9ed8fae309f02079dbf'
     app.run(debug=True)
-
