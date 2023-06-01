@@ -86,7 +86,10 @@ def faq():
 
 @app.route("/admin")
 def admin():
-    return render_template("admin/main.html")
+    if 'user_id' in session:
+        return render_template("admin/main.html")
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/profil')
 def profil():
@@ -107,6 +110,7 @@ def profil():
 @app.route("/projeler")
 def projeler():
     return render_template("frontend/projeler.html")
+
 
 # Mysql Kullanıcı Ekleme
 @app.route('/register', methods=["GET", "POST"])
@@ -148,7 +152,11 @@ def login():
         if user and bcrypt.check_password_hash(user['user_pass'], reg_pass1):
             session['reg_name'] = user['user_name']
             session['user_id'] = user['user_id']
-            return render_template("frontend/main.html")
+            
+            if user['admin'] == 1:
+                return redirect(url_for('admin'))
+            else:
+                return render_template("frontend/main.html")
         else:
             return "Hatalı giriş bilgileri"
 
@@ -196,51 +204,19 @@ def logout():
     session.clear()
     return render_template("frontend/main.html")
 
-# Anakartları veritabanından çekme
-def get_anakartlar():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT anakart_id, marka, fiyat FROM anakartlar")
-    anakartlar = cur.fetchall()
-    cur.close()
-    anakartlar_list = []
-    for anakart in anakartlar:
-        anakart_dict = {
-            'anakart_id': anakart['anakart_id'],
-            'marka': anakart['marka'],
-            'fiyat': anakart['fiyat']
-        }
-        anakartlar_list.append(anakart_dict)
-    return anakartlar_list
+
 
 
 @app.route("/satinal")
 def satinal():
     if 'user_id' in session:
-        anakartlar = get_anakartlar()  # Anakart verilerini al
-        if anakartlar:
-            return render_template("frontend/satinal.html", anakartlar=anakartlar)
-        else:
-            return "Satın alınabilecek anakart bulunmamaktadır."
+      
+        return render_template("frontend/satinal.html")
+
     else:
         return redirect(url_for('login'))
 
 
-
-@app.route('/islemciler/<int:anakart_id>')
-def get_islemciler(anakart_id):
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT id, marka, fiyat FROM islemciler WHERE anakart_id = %s", (anakart_id,))
-    islemciler = cur.fetchall()
-    cur.close()
-    return jsonify(islemciler)
-
-@app.route('/ramler/<int:islemci_id>')
-def get_ramler(islemci_id):
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT id, marka, fiyat FROM ramler WHERE islemci_id = %s", (islemci_id,))
-    ramler = cur.fetchall()
-    cur.close()
-    return jsonify(ramler)
 
 
 if __name__ == '__main__':
