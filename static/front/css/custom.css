@@ -1,1 +1,13 @@
-/* Your custom css code goes here */
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        border: none;
+    }
+
+    .carousel {
+        background-color: transparent;
+    }
+
+    .carousel-item p {
+        color: black;
+    }
