@@ -207,11 +207,24 @@ def logout():
 
 
 
-@app.route("/satinal")
-def satinal():
+@app.route("/tipprojeler")
+def tipprojeler():
     if 'user_id' in session:
       
-        return render_template("frontend/satinal.html")
+        return render_template("admin/tipprojeler.html")
+
+    else:
+        return redirect(url_for('login'))
+    
+@app.route("/kullanicilar")
+def kullanicilar():
+    if 'user_id' in session:
+
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT * FROM tbl_user")
+        data = cursor.fetchall()
+      
+        return render_template("admin/kullanicilar.html", data=data)
 
     else:
         return redirect(url_for('login'))
