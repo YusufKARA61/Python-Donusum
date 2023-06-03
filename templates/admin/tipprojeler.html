@@ -1,193 +1,77 @@
 {% extends "admin/layout.html" %}
-{% block title %} Admin Panel{% endblock title %}
+{% block title %} Admin Panel - Projeler{% endblock title %}
 
 
 {% block icerik %} 
 
 <section class="py-5">
   <div class="row">
-    <div class="col-lg-6 mb-4">
-      <div class="card">
-        <div class="card-header">
-          <h6 class="text-uppercase mb-0">Basic Table</h6>
+    <div class="col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="text-uppercase mb-0">Projeler</h6>
+                    <a href="{{ url_for('proje_ekle') }}" class="btn btn-primary">+ Proje Ekle</a>
+
+                </div>
+            </div>
+            <div class="card-body">                           
+                {% if data %}
+                <table class="table card-text">
+                  <thead>
+                    <tr>
+                        <th>Proje ID</th>
+                        <th>Proje No</th>
+                        <th>Proje Adı</th>
+                        <th>Proje Yapı Sınıfı</th>
+                        <th>Proje Kat Adet</th>
+                        <th>Proje Oda Sayısı</th>
+                        <th>Proje Metre</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        {% for record in data %}
+                        <tr>
+                            <td>{{ record['proje_id'] }}</td>
+                            <td>{{ record['proje_no'] }}</td>
+                            <td>{{ record['proje_adi'] }}</td>
+                            <td>{{ record['proje_yapi_sinifi'] }}</td>
+                            <td>{{ record['proje_kat_adet'] }}</td>
+                            <td>{{ record['proje_oda_sayisi'] }}</td>
+                            <td>{{ record['proje_metre'] }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm">
+                                    <span class="glyphicon glyphicon-pencil"></span> Düzenle
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="if (confirm('Silmek istediğinizden emin misiniz?')) { /* Silme işlemini burada gerçekleştirin */ }">
+                                    <span class="glyphicon glyphicon-trash"></span> Sil
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>Veri bulunamadı.</p>
+                {% endif %}
+            </div>
         </div>
-        <div class="card-body">
-          <table class="table card-text">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
-    <div class="col-lg-6 mb-4">
-      <div class="card">
-        <div class="card-header">
-          <h6 class="text-uppercase mb-0">Striped Table</h6>
-        </div>
-        <div class="card-body">                           
-          <table class="table table-striped card-text">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter                            </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6 mb-4">
-      <div class="card">
-        <div class="card-header">
-          <h6 class="text-uppercase mb-0">Striped table with hover effect</h6>
-        </div>
-        <div class="card-body">                           
-          <table class="table table-striped table-hover card-text">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter                            </td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Sam</td>
-                <td>Nevoresky</td>
-                <td>@facebook                            </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6">
-      <div class="card">
-        <div class="card-header">
-          <h6 class="text-uppercase mb-0">Compact Table</h6>
-        </div>
-        <div class="card-body">                          
-          <table class="table table-striped table-sm card-text">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter      </td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">5</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">6</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
+
 </section>
+
+<script>
+function confirmDelete() {
+    if (confirm("Silmek istediğinizden emin misiniz?")) {
+        // Silme işlemi için gerekli olan kodu buraya ekleyin
+    }
+}
+</script>
+
+
+
 
 
   {% endblock icerik %} 

@@ -1,78 +1,76 @@
 {% extends "admin/layout.html" %}
-{% block title %} Admin Panel{% endblock title %}
+{% block title %} Admin Panel - Kullanıcı Listesi{% endblock title %}
 
 
 {% block icerik %} 
 
 <section class="py-5">
   <div class="row">
-
     <div class="col-lg-12 mb-4">
-      <div class="card">
-        <div class="card-header">
-          <div class="d-flex justify-content-between align-items-center">
-            <h6 class="text-uppercase mb-0">Kullanıcılar</h6>
-            <button type="submit" class="btn btn-primary">+ Kullanıcı ekle</button>
-          </div>
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="text-uppercase mb-0">Kullanıcılar</h6>
+                    <a href="{{ url_for('kullanici_ekle') }}" class="btn btn-primary">+ Kullanıcı Ekle</a>
+                </div>
+            </div>
+            <div class="card-body">                           
+                {% if data %}
+                <table class="table card-text">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Admin</th>
+                            <th>Kullanıcı Adı</th>
+                            <th>TC</th>
+                            <th>Telefon</th>
+                            <th>Doğum</th>
+                            <th>E-posta</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in data %}
+                        <tr>
+                            <td>{{ record['user_id'] }}</td>
+                            <td>{{ record['admin'] }}</td>
+                            <td>{{ record['user_name'] }}</td>
+                            <td>{{ record['user_tc'] }}</td>
+                            <td>{{ record['user_tel'] }}</td>
+                            <td>{{ record['user_dogum'] }}</td>
+                            <td>{{ record['user_email'] }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm">
+                                    <span class="glyphicon glyphicon-pencil"></span> Düzenle
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="if (confirm('Silmek istediğinizden emin misiniz?')) { /* Silme işlemini burada gerçekleştirin */ }">
+                                    <span class="glyphicon glyphicon-trash"></span> Sil
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>Veri bulunamadı.</p>
+                {% endif %}
+            </div>
         </div>
-        <div class="card-body">                           
-          {% if data %}
-          <table class="table card-text">
-              <thead>
-                  <tr>
-                      <th>ID</th>
-                      <th>Admin</th>
-                      <th>Kullanıcı Adı</th>
-                      <th>TC</th>
-                      <th>Telefon</th>
-                      <th>Doğum</th>
-                      <th>E-posta</th>
-                      <th>Parola</th>
-                      <th></th>
-
-                  </tr>
-              </thead>
-              <tbody>
-                {% for record in data %}
-                    <tr>
-                        <td>{{ record[0] }}</td>
-                        <td>{{ record[1] }}</td>
-                        <td>{{ record[2] }}</td>
-                        <td>{{ record[3] }}</td>
-                        <td>{{ record[4] }}</td>
-                        <td>{{ record[5] }}</td>
-                        <td>{{ record[6] }}</td>
-                        <td>{{ record[7] }}</td>
-                        <td>
-                          <button type="button" class="btn btn-primary btn-sm">
-                              <span class="glyphicon glyphicon-pencil"></span> Düzenle
-                          </button>
-                          <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete()>
-                              <span class="glyphicon glyphicon-trash"></span> Sil
-                          </button>
-                      </td>
-                    </tr>
-                {% endfor %}
-              </tbody>
-          </table>
-      {% else %}
-          <p>Veri bulunamadı.</p>
-      {% endif %}
-      
-        </div>
-      </div>
     </div>
+</div>
 
-  </div>
 </section>
 
 <script>
-  function confirmDelete() {
-      if (confirm("Silmek istediğinizden emin misiniz?")) {
-          // Silme işlemi için gerekli olan kodu buraya ekleyin
-      }
-  }
-  </script>
+function confirmDelete() {
+    if (confirm("Silmek istediğinizden emin misiniz?")) {
+        // Silme işlemi için gerekli olan kodu buraya ekleyin
+    }
+}
+</script>
+
+
+
 
 
   {% endblock icerik %} 

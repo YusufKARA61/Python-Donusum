@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
+import os
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -10,6 +11,10 @@ app.config['MYSQL_USER'] = "root"
 app.config['MYSQL_PASSWORD'] = ""
 app.config['MYSQL_DB'] = "phyevv"
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
+
+# Resimlerin kaydedileceği klasör
+UPLOAD_FOLDER = 'static/admin/img'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 mysql = MySQL(app)
 
@@ -47,19 +52,6 @@ def save_contact():
 def blog():
     return render_template("frontend/blog.html")
 
-@app.route("/basvurularim")
-def basvurularim():
-    if 'user_id' in session:
-        user_id = session['user_id']
-
-        cursor = mysql.connection.cursor()
-        query = "SELECT * FROM tbl_talep WHERE user_id = %s"
-        cursor.execute(query, (user_id,))
-        basvurularim = cursor.fetchall()
-
-        return render_template("frontend/basvurularim.html", basvurularim=basvurularim)
-    else:
-        return redirect(url_for('login'))
 
 
 @app.route("/sorularim")
@@ -210,24 +202,100 @@ def logout():
 @app.route("/tipprojeler")
 def tipprojeler():
     if 'user_id' in session:
-      
-        return render_template("admin/tipprojeler.html")
+        conn = mysql.connection
+        cursor = conn.cursor()
 
+        cursor.execute("SELECT * FROM tbl_proje")
+        data = cursor.fetchall()
+
+        cursor.close()
+
+        if data:
+            return render_template("admin/tipprojeler.html", data=data)
+        else:
+            message = "Veri bulunamadı."
+            return render_template("admin/tipprojeler.html", message=message)
     else:
         return redirect(url_for('login'))
+
+    
+@app.route("/basvurularim")
+def basvurularim():
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM tbl_talep WHERE user_id = %s"
+        cursor.execute(query, (user_id,))
+        basvurularim = cursor.fetchall()
+
+        return render_template("frontend/basvurularim.html", basvurularim=basvurularim)
+    else:
+        return redirect(url_for('login'))
+
     
 @app.route("/kullanicilar")
 def kullanicilar():
     if 'user_id' in session:
+        # Veritabanı bağlantısını yap
+        conn = mysql.connection
+        cursor = conn.cursor()
 
-        cursor = mysql.connection.cursor()
+        # Verileri sorgula
         cursor.execute("SELECT * FROM tbl_user")
         data = cursor.fetchall()
-      
-        return render_template("admin/kullanicilar.html", data=data)
 
+        # Veritabanı bağlantısını kapat
+        cursor.close()
+
+        if data:
+            # Verileri şablonla birlikte gönder
+            return render_template("admin/kullanicilar.html", data=data)
+        else:
+            # Veri bulunamadı durumunda mesaj gönder
+            message = "Veri bulunamadı."
+            return render_template("admin/kullanicilar.html", message=message)
     else:
+        # Kullanıcı girişi yapılmamışsa login sayfasına yönlendir
         return redirect(url_for('login'))
+    
+@app.route("/kullaniciekle")
+def kullanici_ekle():
+    return render_template("admin/kullanici_ekle.html")
+
+@app.route("/projeekle", methods=['GET', 'POST'])
+def proje_ekle():
+    if request.method == 'POST':
+        # Formdan gelen verileri al
+        proje_adi = request.form.get('proje_adi')
+        yapi_sinifi = request.form.get('yapi_sinifi')
+        oda_sayisi = request.form.getlist('oda_sayisi')
+        kat_sayisi = request.form.get('kat_sayisi')
+        ev_metrekare = request.form.get('ev_metrekare')
+        proje_resim = request.files['proje_resim']
+
+        # Resimleri kaydetme işlemi
+        if proje_resim:
+            proje_resim_filename = proje_resim.filename
+            proje_resim.save(os.path.join(app.config['UPLOAD_FOLDER'], proje_resim_filename))
+        else:
+            proje_resim_filename = None
+
+        # Veritabanına verileri kaydet
+        cursor = mysql.connection.cursor()
+        query = "INSERT INTO tbl_proje (proje_adi, proje_yapi_sinifi, proje_oda_sayisi, proje_kat_adet, proje_metre, proje_resim) VALUES (%s, %s, %s, %s, %s, %s)"
+        values = (proje_adi, yapi_sinifi, oda_sayisi, kat_sayisi, ev_metrekare, proje_resim_filename)
+        cursor.execute(query, values)
+        mysql.connection.commit()
+        cursor.close()
+
+        # Başarılı bir şekilde kaydedildi mesajını döndür
+        message = "Proje başarıyla kaydedildi."
+        return render_template("admin/proje_ekle.html", message=message)
+
+    # POST isteği değilse veya form gönderilmemişse sayfayı normal şekilde render et
+    return render_template("admin/proje_ekle.html")
+
 
 
 

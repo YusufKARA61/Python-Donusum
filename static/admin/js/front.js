@@ -39,5 +39,11 @@ $(function () {
 
 });
 
+function confirmDelete() {
+    if (confirm("Silmek istediğinizden emin misiniz?")) {
+        // Silme işlemi için gerekli olan kodu buraya ekleyin
+    }
+}
+
 
 Cookies.set('active', 'true');
