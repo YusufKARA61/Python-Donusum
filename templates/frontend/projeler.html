@@ -26,29 +26,24 @@
 
             <div class="sidebar-widget mb-4">
               <div class="flowers-wrap">
-                <p><strong>Plan Türü</strong></p>
-                <form>
-                  <label><input type="checkbox" name="fl-colour" value="red" id="red" /> Tek Katlı Müstakil Ev </label><br>
-                  <label><input type="checkbox" name="fl-colour" value="yellow" id="yellow" /> Dubleks Müstakil Ev</label><br> 
-                  <label><input type="checkbox" name="fl-colour" value="pink" id="pink" /> Villa</label><br>                     
-                  <label><input type="checkbox" name="fl-colour" value="purple" id="purple" /> TinyHouse</label><br>
+                <form method="GET" action="{{ url_for('projeler') }}">
+                  <p><strong>Yapı Sınıfı</strong></p>
+                  <label><input type="checkbox" name="proje_yapi_sinifi" value="Betonarme"/> Betonarme</label><br>
+                  <label><input type="checkbox" name="proje_yapi_sinifi" value="Çelik"/> Çelik</label><br>
+                  <label><input type="checkbox" name="proje_yapi_sinifi" value="Ahşap"/> Ahşap</label><br>
+                
+                  <p><strong>Oda Sayısı</strong></p>
+                  <label><input type="checkbox" name="proje_oda_sayisi" value="1+1"> 1+1</label><br>
+                  <label><input type="checkbox" name="proje_oda_sayisi" value="2+1"> 2+1</label><br>
+                  <label><input type="checkbox" name="proje_oda_sayisi" value="3+1"> 3+1</label><br>
+                  <!-- Diğer seçenekler -->
+                
+                  <button type="submit">Filtrele</button>
                 </form>
-                <p><strong>Yapı Sınıfı</strong></p>
-                <form>
-                  <label><input type="checkbox" name="fl-size" value="tiny" id="tiny" /> Betonarme</label><br>
-                  <label><input type="checkbox" name="fl-size" value="small" id="small" /> Çelik</label><br>
-                  <label><input type="checkbox" name="fl-size" value="medium" id="medium" /> Prefabrik</label><br> 
-                  <label><input type="checkbox" name="fl-size" value="large" id="large" /> Ahşap</label><br>
-                </form>  
-                <p><strong>Oda Sayısı</strong></p>
-                <form>
-                  <div><input type="checkbox" name="fl-cont" value="africa" id="africa" /> 1+0</div>
-                  <div><input type="checkbox" name="fl-cont" value="europe" id="europe" /> 1+1</div>
-                  <div><input type="checkbox" name="fl-cont" value="asia" id="asia" /> 2+1</div>
-                  <div><input type="checkbox" name="fl-cont" value="north-america" id="north-america" /> 3+1</div>
-                  <div><input type="checkbox" name="fl-cont" value="south-america" id="south-america" /> 4+1</div>
-                 
-                </form>
+                
+
+              
+              
               </div>
               
             
@@ -60,31 +55,36 @@
           <div class="col-lg-8">  
 
 
-            <div class="flowers">
-              <div class="flower" data-id="aloe" data-category="green small medium africa">Aloe</div>
-              <div class="flower" data-id="lavendar" data-category="purple green medium africa europe">Lavender</div>
-              <div class="flower" data-id="stinging-nettle" data-category="green large africa europe asia">Stinging Nettle</div>
-              <div class="flower" data-id="gorse" data-category="green yellow large europe">Gorse</div>  
-              <div class="flower" data-id="hemp" data-category="green large asia">Hemp</div>  
-              <div class="flower" data-id="titan-arum" data-category="purple other giant asia">Titan Arum</div>  
-              <div class="flower" data-id="golden-wattle" data-category="green yellow large australasia">Golden Wattle</div>  
-              <div class="flower" data-id="purple-prairie-clover" data-category="purple green other medium north-america">Purple Prairie Clover</div> 
-              <div class="flower" data-id="camellia" data-category="pink other large north-america">Camellia</div> 
-              <div class="flower" data-id="scarlet-carnation" data-category="red medium north-america">Scarlet Carnation</div> 
-              <div class="flower" data-id="indian-paintbrush" data-category="red medium north-america">Indian Paintbrush</div>  
-              <div class="flower" data-id="moss-verbena" data-category="purple other small south-america">Moss Verbena</div>  
-              <div class="flower" data-id="climbing-dayflower" data-category="blue tiny south-america">Climbing Dayflower</div>  
-              <div class="flower" data-id="antarctic-pearlwort" data-category="green yellow large antarctica">Antarctic Pearlwort</div>                 	
-            </div>
 
             {% block profil %} 
 
+            <table class="table card-text">
+              <thead>
+                  <tr>
+                      <th>Proje Resmi</th>
+                      <th>Proje Adı</th>
+                      <th>Yapı Sınıfı</th>
+                      <th>Proje Oda Sayısı</th>
+                      <th>Proje M²</th>
+                      
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for proje in projeler %}
+                  <tr data-href="{{ url_for('projedetay', proje_id=proje.proje_id) }}">
+
+                      <td><img src="{{ url_for('static', filename='admin/img/' + proje.proje_resim) }}" alt="Proje Resmi" class="img-fluid table-image"></td>
+                      <td>{{ proje.proje_adi }}</td>
+                      <td>{{ proje.proje_yapi_sinifi }}</td>
+                      <td>{{ proje.proje_oda_sayisi }}</td>
+                      <td>{{ proje.proje_metre }}</td>
+                      
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+
             {% endblock profil %} 
-
-            
-          
-
-            
 
           </div>
           </div>
@@ -93,6 +93,8 @@
  
         </div>
       </section>
+
+
   
     {% endblock icerik %} 
     

@@ -13,3 +13,22 @@ document.addEventListener("DOMContentLoaded", function () {
     carouselInstance.next();
   });
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Tablodaki satırlara tıklama olayını ekle
+  var rows = document.querySelectorAll("table tbody tr[data-href]");
+  rows.forEach(function(row) {
+      row.addEventListener("click", function() {
+          window.location.href = row.dataset.href;
+      });
+      row.style.cursor = "pointer"; // Satıra imleci göster
+      row.addEventListener("mouseover", function() {
+          row.style.backgroundColor = "#f5f5f5"; // Hover efekti
+      });
+      row.addEventListener("mouseout", function() {
+          row.style.backgroundColor = ""; // Hover efektini kaldır
+      });
+  });
+});
+
+

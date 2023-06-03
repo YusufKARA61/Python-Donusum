@@ -1,0 +1,41 @@
+{% extends "frontend/layout.html" %}
+{% block title %} Tip Projeler {% endblock title %}
+
+
+{% block icerik %} 
+      <!-- Hero Section-->
+
+      <!-- FAQ Section-->
+      <section>
+        
+        <div class="container">
+          <header>
+
+            
+          <div class="jumbotron">
+            <h1>Proje Adı: {{ proje.proje_adi }}</h1>
+            <!--<p><a href="#" class="btn btn-primary btn-large">Profil Düzenle »</a> </p>-->
+          </div>
+          </header>
+          
+          <div class="row"> 
+
+            <div class="col-md-6">
+              <img src="{{ url_for('static', filename='admin/img/' + proje.proje_resim) }}" alt="Ürün Resmi" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+              <h2 class="mb-3">Yapı Sınıfı: {{ proje.proje_yapi_sinifi }}</h2>
+              <p class="text-muted">Oda Sayısı: {{ proje.proje_oda_sayisi }}</p>
+              <h3 class="mb-4">{{ proje.proje_metre }} m²</h3>
+              
+              <button class="btn btn-primary">Teklif Al</button>
+            </div>
+ 
+          </div>
+        </div>
+      </section>
+
+
+  
+    {% endblock icerik %} 
+    
