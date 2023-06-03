@@ -38,19 +38,19 @@
                   <!-- Link-->
                   <li class="nav-item"> <a href="/" class="nav-link active">Anasayfa</a></li>
                   <!-- Link-->
-                  <li class="nav-item"> <a href="hesap" class="nav-link">Kentsel Dönüşüm</a></li>
+                  <li class="nav-item"> <a href="{{ url_for('hesap') }}" class="nav-link">Kentsel Dönüşüm</a></li>
                   <!-- Link-->
-                  <li class="nav-item"> <a href="faq" class="nav-link">S.S.S.</a></li>
+                  <li class="nav-item"> <a href="{{ url_for('faq') }}" class="nav-link">S.S.S.</a></li>
                   <!-- Link-->
-                  <li class="nav-item"> <a href="contact" class="nav-link">İletişim</a></li>
+                  <li class="nav-item"> <a href="{{ url_for('contact') }}" class="nav-link">İletişim</a></li>
               
             </ul>
             
             {% if session['reg_name'] %}
             <ul class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-primary navbar-btn ml-0 ml-lg-3"><img src="{{ url_for('static', filename='admin/img/avatar-6.jpg') }}" alt="Jason Doe" style="max-width: 2.5rem;" class="img-fluid rounded-circle shadow"> {{ session['reg_name'] }}</a>
               <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">{{ session['reg_name'] }}</strong></a>
-                <div class="dropdown-divider"></div><a href="profil" class="dropdown-item">Profil</a>
-                <div class="dropdown-divider"></div><a href="logout" class="dropdown-item">Çıkış</a>
+                <div class="dropdown-divider"></div><a href="{{ url_for('profil') }}" class="dropdown-item">Profil</a>
+                <div class="dropdown-divider"></div><a href="{{ url_for('logout') }}" class="dropdown-item">Çıkış</a>
               </div>
             </ul>
 
@@ -115,10 +115,10 @@
           <div class="col-lg-3 mb-5 mb-lg-0">
             <h5 class="footer-heading">Sayfalar</h5>
             <ul class="list-unstyled">
-              <li> <a href="index.html" class="footer-link">Anasayfa</a></li>
-              <li> <a href="faq.html" class="footer-link">S.S.S.</a></li>
-              <li> <a href="text.html" class="footer-link">Hakkımızda</a></li>
-              <li> <a href="contact.html" class="footer-link">İletişim</a></li>
+              <li> <a href="/" class="footer-link">Anasayfa</a></li>
+              <li> <a href="{{ url_for('faq') }}" class="footer-link">S.S.S.</a></li>
+              <li> <a href="" class="footer-link">Hakkımızda</a></li>
+              <li> <a href="{{ url_for('contact') }}" class="footer-link">İletişim</a></li>
               
             </ul>
           </div>
@@ -146,7 +146,7 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-6 text-center text-lg-left">
-              <p class="copyrights-text mb-3 mb-lg-0">&copy; All rights reserved. Appton.co. Design by <a href="https://bootstrapious.com/p/big-bootstrap-tutorial" class="external footer-link">Bootstrapious </a></p>
+              <p class="copyrights-text mb-3 mb-lg-0">&copy; Tüm hakları saklıdır <a href="https://evveko.com" class="external footer-link">Evveko </a></p>
               <!-- If you want to remove the backlink, please purchase a license for this template @ https://bootstrapious.com/attribution-free-license. Big thanks!-->
               
             </div>

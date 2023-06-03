@@ -71,7 +71,7 @@
               </thead>
               <tbody>
                   {% for proje in projeler %}
-                  <tr data-href="{{ url_for('projedetay', proje_id=proje.proje_id) }}">
+                  <tr class="clickable-row" data-href="{{ url_for('projedetay', proje_id=proje.proje_id) }}">
 
                       <td><img src="{{ url_for('static', filename='admin/img/' + proje.proje_resim) }}" alt="Proje Resmi" class="img-fluid table-image"></td>
                       <td>{{ proje.proje_adi }}</td>

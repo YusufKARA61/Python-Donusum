@@ -99,50 +99,6 @@ def profil():
     return render_template('frontend/profil.html', user=user)
 
 
-@app.route("/projeler", methods=['GET'])
-def projeler():
-    # Filtreleme için yapı sınıfı ve oda sayısı parametrelerini al
-    proje_yapi_sinifi = request.args.get('proje_yapi_sinifi')
-    proje_oda_sayisi = request.args.get('proje_oda_sayisi')
-
-    # Veritabanından projeleri filtrele
-    cursor = mysql.connection.cursor()
-    query = "SELECT * FROM tbl_proje WHERE 1=1"
-    values = []
-
-    if proje_yapi_sinifi is not None:
-        query += " AND proje_yapi_sinifi = %s"
-        values.append(proje_yapi_sinifi)
-
-    if proje_oda_sayisi is not None:
-        query += " AND proje_oda_sayisi = %s"
-        values.append(proje_oda_sayisi)
-
-    cursor.execute(query, values)
-    projeler = cursor.fetchall()
-    cursor.close()
-
-    return render_template("frontend/projeler.html", projeler=projeler)
-
-@app.route("/projedetay/<int:proje_id>")
-def projedetay(proje_id):
-    # Proje detaylarını veritabanından alın
-    cursor = mysql.connection.cursor()
-    query = "SELECT * FROM tbl_proje WHERE proje_id = %s"
-    values = (proje_id,)
-    cursor.execute(query, values)
-    proje = cursor.fetchone()
-    cursor.close()
-
-    # Proje detaylarını ilgili HTML sayfasına aktar
-    return render_template("frontend/projedetay.html", proje=proje)
-
-
-
-
-
-
-
 # Mysql Kullanıcı Ekleme
 @app.route('/register', methods=["GET", "POST"])
 def register():
@@ -233,9 +189,7 @@ def hesap():
 @app.route("/logout")
 def logout():
     session.clear()
-    return render_template("frontend/main.html")
-
-
+    return redirect(url_for('main'))
 
 
 @app.route("/tipprojeler")
@@ -335,7 +289,43 @@ def proje_ekle():
     # POST isteği değilse veya form gönderilmemişse sayfayı normal şekilde render et
     return render_template("admin/proje_ekle.html")
 
+@app.route("/projeler", methods=['GET'])
+def projeler():
+    # Filtreleme için yapı sınıfı ve oda sayısı parametrelerini al
+    proje_yapi_sinifi = request.args.get('proje_yapi_sinifi')
+    proje_oda_sayisi = request.args.get('proje_oda_sayisi')
 
+    # Veritabanından projeleri filtrele
+    cursor = mysql.connection.cursor()
+    query = "SELECT * FROM tbl_proje WHERE 1=1"
+    values = []
+
+    if proje_yapi_sinifi is not None:
+        query += " AND proje_yapi_sinifi = %s"
+        values.append(proje_yapi_sinifi)
+
+    if proje_oda_sayisi is not None:
+        query += " AND proje_oda_sayisi = %s"
+        values.append(proje_oda_sayisi)
+
+    cursor.execute(query, values)
+    projeler = cursor.fetchall()
+    cursor.close()
+
+    return render_template("frontend/projeler.html", projeler=projeler)
+
+@app.route("/projedetay/<int:proje_id>")
+def projedetay(proje_id):
+    # Proje detaylarını veritabanından alın
+    cursor = mysql.connection.cursor()
+    query = "SELECT * FROM tbl_proje WHERE proje_id = %s"
+    values = (proje_id,)
+    cursor.execute(query, values)
+    proje = cursor.fetchone()
+    cursor.close()
+
+    # Proje detaylarını ilgili HTML sayfasına aktar
+    return render_template("frontend/projedetay.html", proje=proje)
 
 
 
