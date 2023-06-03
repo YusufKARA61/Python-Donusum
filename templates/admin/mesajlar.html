@@ -1,0 +1,35 @@
+{% extends "admin/layout.html" %}
+{% block title %} Admin Panel{% endblock title %}
+
+
+{% block icerik %} 
+
+ 
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Subject</th>
+      <th>Message</th>
+      <th>Is Read</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for message in messages %}
+    <tr>
+      <td>{{ message[0] }}</td>
+      <td>{{ message[1] }}</td>
+      <td>{{ message[2] }}</td>
+      <td>{{ message[3] }}</td>
+      <td>{{ message[4] }}</td>
+      <td>{{ "Yes" if message[5] else "No" }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+  {% endblock icerik %} 

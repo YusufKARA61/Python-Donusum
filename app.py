@@ -61,6 +61,19 @@ def sorularim():
     else:
         return redirect(url_for('login'))
 
+@app.route("/mesajlar")
+def mesajlar():
+    if 'user_id' in session:
+        cursor = mysql.connection.cursor()
+        query = "SELECT id, name, email, subject, message, is_read FROM tbl_messages"
+        cursor.execute(query)
+        messages = cursor.fetchall()
+        cursor.close()
+
+        return render_template("admin/mesajlar.html", messages=messages)
+    else:
+        return redirect(url_for('login'))
+
 @app.route("/profilayar")
 def profilayar():
     if 'user_id' in session:
