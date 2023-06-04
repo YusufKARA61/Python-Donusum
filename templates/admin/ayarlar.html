@@ -1,0 +1,89 @@
+{% extends "admin/layout.html" %}
+{% block title %} Admin Panel - Kullanıcı Listesi{% endblock title %}
+
+
+{% block icerik %} 
+
+<section class="py-5">
+  <div class="row">
+      <!-- Form Elements -->
+      <div class="col-lg-12 mb-5">
+          <div class="card">
+              <div class="card-header">
+                  <h3 class="h6 text-uppercase mb-0">Genel Ayarlar</h3>
+              </div>
+              <div class="card-body">
+                  <form class="form-horizontal" action="{{ url_for('proje_ekle') }}" method="POST" enctype="multipart/form-data">
+                      <div class="line"></div>
+                      <div class="form-group row">
+                          <label class="col-md-3 form-control-label">Site Adı</label>
+                          <div class="col-md-9">
+                              <input type="text" name="proje_adi" class="form-control form-control-lg">
+                              <small class="form-text text-muted ml-3">Başlıkta Görünecek İsim</small>
+                          </div>
+                      </div>
+                      <div class="line"></div>
+                      <div class="form-group row">
+                        <label class="col-md-3 form-control-label">Ana Sayfa Manşet</label>
+                        <div class="col-md-9">
+                            <input type="text" name="proje_adi" class="form-control form-control-lg">
+                            <small class="form-text text-muted ml-3">Anasayfa manşetinde görünen kısım</small>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-md-3 form-control-label">Site Logo</label>
+                        <div class="col-md-9">
+                            <input type="file" name="proje_resim" class="form-control-file">
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                      <div class="form-group row">
+                          <label class="col-md-3 form-control-label">Google Analytics</label>
+                          <div class="col-md-9">
+                              <input type="text" name="ev_metrekare" class="form-control">
+                              <small class="form-text text-muted ml-3">Kodu Buraya yazın</small>
+                          </div>
+                        </div>
+                      <div class="line"></div>
+                      <div class="form-group row">
+                          <label class="col-md-3 form-control-label">Sosyal Medya</label>
+                          <div class="col-md-9">
+                              <input type="text" name="ev_metrekare" class="form-control">
+                              <small class="form-text text-muted ml-3">İnstagram</small>
+                          </div>
+                          <label class="col-md-3 form-control-label"></label>
+                          <div class="col-md-9">
+                            <input type="text" name="ev_metrekare" class="form-control">
+                            <small class="form-text text-muted ml-3">Facebook</small>
+                        </div>
+                        <label class="col-md-3 form-control-label"></label>
+                          <div class="col-md-9">
+                              <input type="text" name="ev_metrekare" class="form-control">
+                              <small class="form-text text-muted ml-3">Twitter</small>
+                          </div>
+                          <label class="col-md-3 form-control-label"></label>
+                          <div class="col-md-9">
+                            <input type="text" name="ev_metrekare" class="form-control">
+                            <small class="form-text text-muted ml-3">YouTube</small>
+                        </div>
+                      </div>
+
+                      <div class="line"></div>
+                      <div class="form-group row">
+                          <div class="col-md-9 ml-auto">
+                              <button type="submit" class="btn btn-primary">Kaydet</button>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+
+
+
+  {% endblock icerik %} 

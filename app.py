@@ -81,6 +81,13 @@ def profilayar():
     else:
         return redirect(url_for('login'))
 
+@app.route("/ayarlar")
+def ayarlar():
+    if 'user_id' in session:
+        return render_template("admin/ayarlar.html")
+    else:
+        return redirect(url_for('login'))
+
 @app.route("/donusum")
 def donusum():
     return render_template("frontend/donusum.html")
@@ -118,6 +125,7 @@ def register():
     if request.method == 'GET':
         return render_template("frontend/register.html")
     else:
+        reg_type = request.form.get('reg_type')
         reg_name = request.form.get('reg_name')
         reg_tc = request.form.get('reg_tc')
         reg_email = request.form.get('reg_email')
@@ -127,8 +135,8 @@ def register():
         user_pass = bcrypt.generate_password_hash(reg_pass1).decode('utf-8')
 
         cursor = mysql.connection.cursor()
-        query = "INSERT INTO tbl_user (user_name, user_tc, user_tel, user_dogum, user_email, user_pass) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (reg_name, reg_tc, reg_tel, reg_dogum, reg_email, user_pass))
+        query = "INSERT INTO tbl_user (user_type, user_name, user_tc, user_tel, user_dogum, user_email, user_pass) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (reg_type, reg_name, reg_tc, reg_tel, reg_dogum, reg_email, user_pass))
         mysql.connection.commit()
         cursor.close()
 
