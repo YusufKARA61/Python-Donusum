@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
+from flask import flash
 import os
 
 app = Flask(__name__)
@@ -125,17 +126,29 @@ def register():
     if request.method == 'GET':
         return render_template("frontend/register.html")
     else:
+        reg_email = request.form.get('reg_email')
+
+        # Veritabanında e-posta kontrolü yapılması
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM tbl_user WHERE user_email = %s"
+        cursor.execute(query, (reg_email,))
+        user = cursor.fetchone()
+        cursor.close()
+
+        if user:
+            flash('Bu e-posta adresi zaten kayıtlı.')
+            return redirect(url_for('register'))
+
         reg_type = request.form.get('reg_type')
         reg_name = request.form.get('reg_name')
         reg_tc = request.form.get('reg_tc')
-        reg_email = request.form.get('reg_email')
         reg_tel = request.form.get('reg_tel')
         reg_dogum = request.form.get('reg_dogum')
         reg_pass1 = request.form.get('reg_pass1')
         user_pass = bcrypt.generate_password_hash(reg_pass1).decode('utf-8')
 
         cursor = mysql.connection.cursor()
-        query = "INSERT INTO tbl_user (user_type, user_name, user_tc, user_tel, user_dogum, user_email, user_pass) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        query = "INSERT INTO tbl_user (user_type,  user_name, user_tc, user_tel, user_dogum, user_email, user_pass) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(query, (reg_type, reg_name, reg_tc, reg_tel, reg_dogum, reg_email, user_pass))
         mysql.connection.commit()
         cursor.close()

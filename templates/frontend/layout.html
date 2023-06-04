@@ -38,7 +38,7 @@
                   <!-- Link-->
                   <li class="nav-item"> <a href="/" class="nav-link active">Anasayfa</a></li>
                   <!-- Link-->
-                  <li class="nav-item"> <a href="{{ url_for('hesap') }}" class="nav-link">Kentsel Dönüşüm</a></li>
+                  <li class="nav-item"> <a href="" class="nav-link">Ev Maliyet Hesabı</a></li>
                   <!-- Link-->
                   <li class="nav-item"> <a href="{{ url_for('faq') }}" class="nav-link">S.S.S.</a></li>
                   <!-- Link-->
@@ -47,7 +47,7 @@
             </ul>
             
             {% if session['reg_name'] %}
-            <ul class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-primary navbar-btn ml-0 ml-lg-3"><img src="{{ url_for('static', filename='admin/img/avatar-6.jpg') }}" alt="Jason Doe" style="max-width: 2.5rem;" class="img-fluid rounded-circle shadow"> {{ session['reg_name'] }}</a>
+            <ul class="nav-item dropdown ml-auto"><a id="userInfo"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-primary navbar-btn ml-0 ml-lg-3"><img src="{{ url_for('static', filename='admin/img/user.png') }}" style="max-width: 2rem;" class="img-fluid rounded-circle shadow"> {{ session['reg_name'] }}</a>
               <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">{{ session['reg_name'] }}</strong></a>
                 <div class="dropdown-divider"></div><a href="{{ url_for('profil') }}" class="dropdown-item">Profil</a>
                 <div class="dropdown-divider"></div><a href="{{ url_for('logout') }}" class="dropdown-item">Çıkış</a>
