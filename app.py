@@ -19,9 +19,24 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 mysql = MySQL(app)
 
+ayarlar = None
+
+@app.before_first_request
+def get_ayarlar():
+    global ayarlar
+
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM tbl_ayar")
+    ayarlar = cursor.fetchone()
+    cursor.close()
+
 @app.route("/")
 def main():
-    return render_template("frontend/main.html")
+    
+
+    return render_template("frontend/main.html", ayar=ayarlar)
+
+
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
@@ -30,9 +45,9 @@ def contact():
 
         # Mesaj gönderildi bildirimini göster
         message = "Mesaj gönderildi"
-        return render_template("frontend/contact.html", notification=message)
+        return render_template("frontend/contact.html", notification=message, ayar=ayarlar)
     
-    return render_template("frontend/contact.html", notification=None)
+    return render_template("frontend/contact.html", notification=None, ayar=ayarlar)
 
 @app.route("/save_contact", methods=["POST"])
 def save_contact():
@@ -51,7 +66,7 @@ def save_contact():
 
 @app.route("/blog")
 def blog():
-    return render_template("frontend/blog.html")
+    return render_template("frontend/blog.html", ayar=ayarlar )
 
 
 
@@ -85,9 +100,37 @@ def profilayar():
 @app.route("/ayarlar")
 def ayarlar():
     if 'user_id' in session:
-        return render_template("admin/ayarlar.html")
+        return render_template("admin/ayarlar.html", ayar=ayarlar)
     else:
         return redirect(url_for('login'))
+
+@app.route('/ayar_guncelle', methods=["POST"])
+def ayar_guncelle():
+    site_name = request.form['site_name']
+    site_title = request.form['site_title']
+    site_logo = request.files['site_logo']
+    google_analytics = request.form['site_analytics']
+    site_instagram = request.form['site_instagram']
+    site_facebook = request.form['site_facebook']
+    site_twiter = request.form['site_twiter']
+    site_youtube = request.form['site_youtube']
+
+    # Resimleri kaydetme işlemi
+    if site_logo:
+        site_logo_filename = site_logo.filename
+        site_logo.save(os.path.join(app.config['UPLOAD_FOLDER'], site_logo_filename))
+    else:
+        site_logo_filename = None
+
+    cursor = mysql.connection.cursor()
+    query = "UPDATE tbl_ayar SET site_name = %s, site_title = %s, site_logo = %s, site_analytics = %s, site_instagram = %s, site_facebook = %s, site_twiter = %s, site_youtube = %s WHERE id = 1"
+    cursor.execute(query, (site_name, site_title, site_logo_filename, google_analytics, site_instagram, site_facebook, site_twiter, site_youtube))
+    mysql.connection.commit()
+    cursor.close()
+
+    return redirect(url_for('ayarlar'))
+
+
 
 @app.route("/donusum")
 def donusum():
@@ -95,7 +138,7 @@ def donusum():
 
 @app.route("/faq")
 def faq():
-    return render_template("frontend/faq.html")
+    return render_template("frontend/faq.html" , ayar=ayarlar)
 
 @app.route("/admin")
 def admin():
@@ -124,7 +167,7 @@ def profil():
 @app.route('/register', methods=["GET", "POST"])
 def register():
     if request.method == 'GET':
-        return render_template("frontend/register.html")
+        return render_template("frontend/register.html" , ayar=ayarlar)
     else:
         reg_email = request.form.get('reg_email')
 
@@ -155,7 +198,7 @@ def register():
 
         session['reg_name'] = reg_name
 
-        return render_template("frontend/main.html")
+        return render_template("frontend/main.html", ayar=ayarlar)
 
 # Mysql Kullanıcı Giriş
 @app.route('/login', methods=["GET", "POST"])
@@ -177,12 +220,12 @@ def login():
             if user['admin'] == 1:
                 return redirect(url_for('admin'))
             else:
-                return render_template("frontend/main.html")
+                return render_template("frontend/main.html", ayar=ayarlar)
         else:
             return "Hatalı giriş bilgileri"
 
     else:
-        return render_template("frontend/login.html")
+        return render_template("frontend/login.html", ayar=ayarlar)
 
 
 # Mysql Adres Ekleme
@@ -346,7 +389,7 @@ def projeler():
     projeler = cursor.fetchall()
     cursor.close()
 
-    return render_template("frontend/projeler.html", projeler=projeler)
+    return render_template("frontend/projeler.html", projeler=projeler, ayar=ayarlar)
 
 @app.route("/projedetay/<int:proje_id>")
 def projedetay(proje_id):
@@ -359,7 +402,7 @@ def projedetay(proje_id):
     cursor.close()
 
     # Proje detaylarını ilgili HTML sayfasına aktar
-    return render_template("frontend/projedetay.html", proje=proje)
+    return render_template("frontend/projedetay.html", proje=proje, ayar=ayarlar)
 
 
 

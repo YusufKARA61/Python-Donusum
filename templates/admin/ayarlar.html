@@ -13,12 +13,12 @@
                   <h3 class="h6 text-uppercase mb-0">Genel Ayarlar</h3>
               </div>
               <div class="card-body">
-                  <form class="form-horizontal" action="{{ url_for('proje_ekle') }}" method="POST" enctype="multipart/form-data">
+                  <form class="form-horizontal" action="{{ url_for('ayar_guncelle') }}" method="POST" enctype="multipart/form-data">
                       <div class="line"></div>
                       <div class="form-group row">
                           <label class="col-md-3 form-control-label">Site Adı</label>
                           <div class="col-md-9">
-                              <input type="text" name="proje_adi" class="form-control form-control-lg">
+                              <input type="text" name="site_name" class="form-control form-control-lg" placeholder="{{ ayar.site_name }}">
                               <small class="form-text text-muted ml-3">Başlıkta Görünecek İsim</small>
                           </div>
                       </div>
@@ -26,7 +26,7 @@
                       <div class="form-group row">
                         <label class="col-md-3 form-control-label">Ana Sayfa Manşet</label>
                         <div class="col-md-9">
-                            <input type="text" name="proje_adi" class="form-control form-control-lg">
+                            <input type="text" name="site_title" class="form-control form-control-lg" placeholder="{{ ayar.site_title }}">
                             <small class="form-text text-muted ml-3">Anasayfa manşetinde görünen kısım</small>
                         </div>
                     </div>
@@ -34,14 +34,14 @@
                     <div class="form-group row">
                         <label class="col-md-3 form-control-label">Site Logo</label>
                         <div class="col-md-9">
-                            <input type="file" name="proje_resim" class="form-control-file">
+                            <input type="file" name="site_logo" class="form-control-file">
                         </div>
                     </div>
                     <div class="line"></div>
                       <div class="form-group row">
                           <label class="col-md-3 form-control-label">Google Analytics</label>
                           <div class="col-md-9">
-                              <input type="text" name="ev_metrekare" class="form-control">
+                              <input type="text" name="site_analytics" class="form-control">
                               <small class="form-text text-muted ml-3">Kodu Buraya yazın</small>
                           </div>
                         </div>
@@ -49,22 +49,22 @@
                       <div class="form-group row">
                           <label class="col-md-3 form-control-label">Sosyal Medya</label>
                           <div class="col-md-9">
-                              <input type="text" name="ev_metrekare" class="form-control">
+                              <input type="text" name="site_instagram" class="form-control" placeholder="{{ ayar.site_instagram }}">
                               <small class="form-text text-muted ml-3">İnstagram</small>
                           </div>
                           <label class="col-md-3 form-control-label"></label>
                           <div class="col-md-9">
-                            <input type="text" name="ev_metrekare" class="form-control">
+                            <input type="text" name="site_facebook" class="form-control" placeholder="{{ ayar.site_facebook }}">
                             <small class="form-text text-muted ml-3">Facebook</small>
                         </div>
                         <label class="col-md-3 form-control-label"></label>
                           <div class="col-md-9">
-                              <input type="text" name="ev_metrekare" class="form-control">
+                              <input type="text" name="site_twiter" class="form-control" placeholder="{{ ayar.site_twiter }}">
                               <small class="form-text text-muted ml-3">Twitter</small>
                           </div>
                           <label class="col-md-3 form-control-label"></label>
                           <div class="col-md-9">
-                            <input type="text" name="ev_metrekare" class="form-control">
+                            <input type="text" name="site_youtube" class="form-control" placeholder="{{ ayar.site_youtube }}">
                             <small class="form-text text-muted ml-3">YouTube</small>
                         </div>
                       </div>
