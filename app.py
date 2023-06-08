@@ -94,9 +94,54 @@ def mesajlar():
 @app.route("/profilayar")
 def profilayar():
     if 'user_id' in session:
-        return render_template("frontend/profilayar.html", ayar=ayarlar)
+        user_id = session['user_id']  # Kullanıcı oturumu kontrol edilerek user_id değeri alınıyor
+        cur = mysql.connection.cursor()
+        query = "SELECT user_name, user_email, user_type FROM tbl_user WHERE user_id = %s"
+        cur.execute(query, (user_id,))
+        user = cur.fetchone()
+        cur.close()
+        return render_template("frontend/profilayar.html", user=user, ayar=ayarlar)
     else:
         return redirect(url_for('login'))
+    
+@app.route("/taleplerim")
+def taleplerim():
+    if 'user_id' in session:
+        user_id = session['user_id']
+        
+        # Kullanıcının taleplerini al
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM tbl_talepler WHERE user_id = %s"
+        values = (user_id,)
+        cursor.execute(query, values)
+        talepler = cursor.fetchall()
+        cursor.close()
+        
+        # Her talebin ilgili projesinin verilerini al
+        for talep in talepler:
+            proje_id = talep['proje_id']
+            cursor = mysql.connection.cursor()
+            query = "SELECT * FROM tbl_proje WHERE proje_id = %s"
+            values = (proje_id,)
+            cursor.execute(query, values)
+            proje = cursor.fetchone()
+            talep['proje'] = proje
+            cursor.close()
+        
+        # Kullanıcının bilgilerini al
+        cur = mysql.connection.cursor()
+        query = "SELECT user_name, user_email, user_type FROM tbl_user WHERE user_id = %s"
+        cur.execute(query, (user_id,))
+        user = cur.fetchone()
+        cur.close()
+        
+        return render_template("frontend/taleplerim.html", talepler=talepler, user=user, ayar=ayarlar)
+    else:
+        return redirect(url_for('index'))
+
+
+
+
 
 @app.route("/ayarlar")
 def ayarlar():
