@@ -38,7 +38,7 @@
                   <!-- Link-->
                   <li class="nav-item"> <a href="/" class="nav-link active">Anasayfa</a></li>
                   <!-- Link-->
-                  <li class="nav-item"> <a href="" class="nav-link">Ev Maliyet Hesabı</a></li>        
+                  <li class="nav-item"> <a href="{{ url_for('projeler') }}" class="nav-link">Projeler</a></li>        
                   <!-- Link-->
                   <li class="nav-item"> <a href="{{ url_for('blog') }}" class="nav-link">Blog</a></li>
                   <!-- Link-->
@@ -60,8 +60,8 @@
 
             <ul class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" class="btn btn-primary navbar-btn ml-0 ml-lg-3">Giriş/Kayıt</a>
               <div aria-labelledby="userInfo" class="dropdown-menu">
-                <a href="register" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">Kayıt</strong></a>
-                <a href="login" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">Giriş</strong></a>
+                <a href="{{ url_for('register') }}" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">Kayıt</strong></a>
+                <a href="{{ url_for('login') }}" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">Giriş</strong></a>
                 
               </div>
             </ul>

@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
+from datetime import datetime
 from flask import flash
 import os
 
@@ -73,7 +74,7 @@ def blog():
 @app.route("/sorularim")
 def sorularim():
     if 'user_id' in session:
-        return render_template("frontend/sorularim.html")
+        return render_template("frontend/sorularim.html", ayar=ayarlar)
     else:
         return redirect(url_for('login'))
 
@@ -93,7 +94,7 @@ def mesajlar():
 @app.route("/profilayar")
 def profilayar():
     if 'user_id' in session:
-        return render_template("frontend/profilayar.html")
+        return render_template("frontend/profilayar.html", ayar=ayarlar)
     else:
         return redirect(url_for('login'))
 
@@ -147,20 +148,40 @@ def admin():
     else:
         return redirect(url_for('login'))
 
+@app.route("/talep_olustur", methods=["POST"])
+def talep_olustur():
+    if request.method == "POST":
+        proje_id = request.form['proje_id']
+        user_id = request.form['user_id']
+        talep_tarihi = request.form['talep_tarihi']
+        
+        cursor = mysql.connection.cursor()
+        query = "INSERT INTO tbl_talepler (user_id, proje_id, talep_tarihi) VALUES (%s, %s, %s)"
+        values = (user_id, proje_id, talep_tarihi)
+        cursor.execute(query, values)
+        mysql.connection.commit()
+        cursor.close()
+        
+        return redirect(url_for('profil', user_id=user_id))  # Profil sayfasına yönlendir
+    else:
+        return redirect(url_for('index'))  # Eğer POST isteği değilse, ana sayfaya yönlendir
+
+
 @app.route('/profil')
 def profil():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
     user_id = session['user_id']
-    
+
     cur = mysql.connection.cursor()
-    query = "SELECT user_name, user_email FROM tbl_user WHERE user_id = %s"
+    query = "SELECT user_name, user_email, user_type FROM tbl_user WHERE user_id = %s"
     cur.execute(query, (user_id,))
     user = cur.fetchone()
     cur.close()
-    
-    return render_template('frontend/profil.html', user=user)
+
+    return render_template('frontend/profil.html', user=user, ayar=ayarlar)
+
 
 
 # Mysql Kullanıcı Ekleme
@@ -299,7 +320,7 @@ def basvurularim():
         cursor.execute(query, (user_id,))
         basvurularim = cursor.fetchall()
 
-        return render_template("frontend/basvurularim.html", basvurularim=basvurularim)
+        return render_template("frontend/basvurularim.html", basvurularim=basvurularim, ayar=ayarlar)
     else:
         return redirect(url_for('login'))
 
@@ -401,8 +422,26 @@ def projedetay(proje_id):
     proje = cursor.fetchone()
     cursor.close()
 
-    # Proje detaylarını ilgili HTML sayfasına aktar
-    return render_template("frontend/projedetay.html", proje=proje, ayar=ayarlar)
+    # Kullanıcı girişi kontrolü yapılması
+    if 'user_id' in session:
+        user_id = session['user_id']
+        # Kullanıcı girişi varsa, kullanıcı verilerini alın
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM tbl_user WHERE user_id = %s"
+        values = (user_id,)
+        cursor.execute(query, values)
+        user = cursor.fetchone()
+        cursor.close()
+
+        # Tarih bilgisini al
+        current_date = datetime.now().strftime("%Y-%m-%d")
+
+        # Proje detaylarını ilgili HTML sayfasına ve kullanıcı verilerini aktar
+        return render_template("frontend/projedetay.html", proje=proje, ayar=ayarlar, user=user, current_date=current_date)
+    else:
+        # Kullanıcı girişi yoksa sadece proje detaylarını aktar
+        return render_template("frontend/projedetay.html", proje=proje, ayar=ayarlar)
+
 
 
 

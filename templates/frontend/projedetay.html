@@ -28,8 +28,19 @@
               <p class="text-muted">Oda Sayısı: {{ proje.proje_oda_sayisi }}</p>
               <h3 class="mb-4">{{ proje.proje_metre }} m²</h3>
               
-              <button class="btn btn-primary">Teklif Al</button>
+              {% if user %}
+                <form action="/talep_olustur" method="POST">
+                  <input type="hidden" name="proje_id" value="{{ proje.proje_id }}">
+                  <input type="hidden" name="user_id" value="{{ user.user_id }}">
+                  <input type="hidden" name="talep_tarihi" value="{{ current_date }}">
+                  
+                  <input type="submit" value="Talep Oluştur">
+                </form>
+              {% else %}
+                <p>Teklif almak için <a href="{{ url_for('login') }}">giriş yapın</a>.</p>
+              {% endif %}
             </div>
+            
  
           </div>
         </div>
