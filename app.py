@@ -31,6 +31,7 @@ def get_ayarlar():
     ayarlar = cursor.fetchone()
     cursor.close()
 
+
 @app.route("/")
 def main():
     
@@ -210,6 +211,54 @@ def talep_olustur():
         return redirect(url_for('profil', user_id=user_id))  # Profil sayfasına yönlendir
     else:
         return redirect(url_for('index'))  # Eğer POST isteği değilse, ana sayfaya yönlendir
+    
+@app.route("/tum_talepler")
+def tum_talepler():
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM tbl_talepler"
+        cursor.execute(query)
+        talepler = cursor.fetchall()
+
+        # Talepleri döngüye alarak ilgili verileri çekme
+        for talep in talepler:
+            talep_id = talep['talep_id']
+            proje_id = talep['proje_id']
+            user_id = talep['user_id']
+
+            # Talep bilgilerini çekme
+            cursor.execute("SELECT * FROM tbl_talepler WHERE talep_id = %s", (talep_id,))
+            talep_bilgisi = cursor.fetchone()
+
+            # Kullanıcı bilgilerini çekme
+            cursor.execute("SELECT * FROM tbl_user WHERE user_id = %s", (user_id,))
+            kullanici_bilgisi = cursor.fetchone()
+
+            # Proje bilgilerini çekme
+            cursor.execute("SELECT * FROM tbl_proje WHERE proje_id = %s", (proje_id,))
+            proje_bilgisi = cursor.fetchone()
+
+            # İlgili verileri talep sözlüğüne ekleyerek güncelleme
+            talep['talep_bilgisi'] = talep_bilgisi
+            talep['kullanici_bilgisi'] = kullanici_bilgisi
+            talep['proje_bilgisi'] = proje_bilgisi
+
+        cursor.close()
+
+         # Kullanıcının bilgilerini al
+        cur = mysql.connection.cursor()
+        query = "SELECT user_name, user_email, user_type FROM tbl_user WHERE user_id = %s"
+        cur.execute(query, (user_id,))
+        user = cur.fetchone()
+        cur.close()
+
+        return render_template("frontend/tum_talepler.html", talepler=talepler, user=user, ayar=ayarlar)
+    else:
+        return redirect(url_for('login'))
+
+
 
 
 @app.route('/profil')

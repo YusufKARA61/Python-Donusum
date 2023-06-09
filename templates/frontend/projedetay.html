@@ -34,7 +34,7 @@
                   <input type="hidden" name="user_id" value="{{ user.user_id }}">
                   <input type="hidden" name="talep_tarihi" value="{{ current_date }}">
                   
-                  <input type="submit" value="Talep Oluştur">
+                  <input type="submit" value="Talep Oluştur" class="btn btn-primary">
                 </form>
               {% else %}
                 <p>Teklif almak için <a href="{{ url_for('login') }}">giriş yapın</a>.</p>

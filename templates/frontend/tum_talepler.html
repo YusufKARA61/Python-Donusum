@@ -1,0 +1,30 @@
+{% extends "frontend/profil.html" %}
+{% block title %} Tüm Talepler{% endblock title %}
+
+{% block profil %}
+
+
+
+<table class="table align-middle mb-0 bg-white">
+  <thead class="bg-light">
+        <tr>
+          <th>Proje Resim</th>
+          <th>Proje Adı</th>
+          <th>Talep Sahibi</th>
+          <th>Talep Tarihi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for talep in talepler %}
+          <tr>
+            <td><img src="{{ url_for('static', filename='admin/img/' + talep.proje_bilgisi.proje_resim) }}" alt="Proje Resmi" class="img-fluid table-image"></td>
+            <td>{{ talep.proje_bilgisi.proje_adi }}</td>
+            <td>{{ talep.kullanici_bilgisi.user_name }}</td>
+            <td>{{ talep.talep_tarihi }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+      
+    </table>
+
+{% endblock profil %}
