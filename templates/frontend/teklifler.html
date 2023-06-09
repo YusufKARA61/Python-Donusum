@@ -1,0 +1,27 @@
+<!-- tekliflerim.html -->
+{% extends "frontend/profil.html" %}
+
+{% block title %} Tekliflerim {% endblock title %}
+
+{% block profil %}
+<table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+        <tr>
+            <th>Talep ID</th>
+            <th>Teklif Miktarı</th>
+            <th>Teklif Açıklama</th>
+            <th>Teklif Tarihi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for teklif in teklifler %}
+        <tr>
+            <td>{{ teklif.talep_id }}</td>
+            <td>{{ teklif.teklif_miktari }}</td>
+            <td>{{ teklif.teklif_aciklama }}</td>
+            <td>{{ teklif.teklif_tarihi }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock profil %}

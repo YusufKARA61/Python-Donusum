@@ -1,33 +1,33 @@
+<!-- taleplerim.html -->
 {% extends "frontend/profil.html" %}
 {% block title %} Taleplerim {% endblock title %}
 
-
-{% block profil %} 
-
-
-
+{% block profil %}
 <table class="table align-middle mb-0 bg-white">
-  <thead class="bg-light">
+    <thead class="bg-light">
         <tr>
-          <th>Proje Resim</th>
-          <th>Proje Adı</th>
-          <th>Proje Yapı Sınıfı</th>
-          <th>Proje Oda Sayısı</th>
+            <th>Proje Resim</th>
+            <th>Proje Adı</th>
+            <th>Yapı Sınıfı</th>
+            <th>Oda Sayısı</th>
+            <th></th>
         </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
         {% for talep in talepler %}
-          <tr>
+        <tr>
             <td><img src="{{ url_for('static', filename='admin/img/' + talep.proje.proje_resim) }}" alt="Proje Resmi" class="img-fluid table-image"></td>
             <td>{{ talep.proje.proje_adi }}</td>
             <td>{{ talep.proje.proje_yapi_sinifi }}</td>
             <td>{{ talep.proje.proje_oda_sayisi }}</td>
-          </tr>
+            <td>
+                <form action="{{ url_for('talep_iptal', talep_id=talep.talep_id) }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Talep İptal</button>
+                </form>
+                <a href="{{ url_for('teklifleri_gor', talep_id=talep.talep_id) }}" class="btn btn-primary btn-sm">Teklifler</a>
+            </td>
+        </tr>
         {% endfor %}
-      </tbody>
-    </table>
-    
-
-  
-{% endblock profil %} 
-    
+    </tbody>
+</table>
+{% endblock profil %}

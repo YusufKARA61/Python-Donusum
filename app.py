@@ -212,6 +212,44 @@ def talep_olustur():
     else:
         return redirect(url_for('index'))  # Eğer POST isteği değilse, ana sayfaya yönlendir
     
+# Talebi iptal et
+@app.route("/talep_iptal/<int:talep_id>", methods=["POST"])
+def talep_iptal(talep_id):
+    if 'user_id' in session:
+        # Talebi sil
+        cursor = mysql.connection.cursor()
+        query = "DELETE FROM tbl_talepler WHERE talep_id = %s"
+        cursor.execute(query, (talep_id,))
+        mysql.connection.commit()
+        cursor.close()
+
+        # Talebe bağlı teklifleri sil
+        cursor = mysql.connection.cursor()
+        query = "DELETE FROM tbl_teklifler WHERE talep_id = %s"
+        cursor.execute(query, (talep_id,))
+        mysql.connection.commit()
+        cursor.close()
+
+        flash("Talep ve bağlı teklifler başarıyla silindi.")
+        return redirect(url_for('tum_talepler'))
+    else:
+        return redirect(url_for('login'))
+# Teklifleri gör
+@app.route("/teklifleri_gor/<int:talep_id>")
+def teklifleri_gor(talep_id):
+    if 'user_id' in session:
+        # Talebe verilen teklifleri al
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM tbl_teklifler WHERE talep_id = %s"
+        cursor.execute(query, (talep_id,))
+        teklifler = cursor.fetchall()
+        cursor.close()
+
+        return render_template("frontend/teklifler.html", teklifler=teklifler, ayar=ayarlar)
+    else:
+        return redirect(url_for('login'))
+
+    
 @app.route("/tum_talepler")
 def tum_talepler():
     if 'user_id' in session:
@@ -247,7 +285,7 @@ def tum_talepler():
 
         cursor.close()
 
-         # Kullanıcının bilgilerini al
+        # Kullanıcının bilgilerini al
         cur = mysql.connection.cursor()
         query = "SELECT user_name, user_email, user_type FROM tbl_user WHERE user_id = %s"
         cur.execute(query, (user_id,))
@@ -259,6 +297,51 @@ def tum_talepler():
         return redirect(url_for('login'))
 
 
+@app.route("/teklif_ver/<int:talep_id>", methods=["GET", "POST"])
+def teklif_ver(talep_id):
+    if 'user_id' in session:
+        user = None  # user değişkenini None olarak tanımla
+        if request.method == "POST":
+            teklif_miktari = request.form['teklif_miktari']
+            teklif_aciklama = request.form['teklif_aciklama']
+            teklif_tarihi = request.form['teklif_tarihi']
+
+            # Kullanıcının bilgilerini al
+            user_id = session['user_id']
+            cur = mysql.connection.cursor()
+            query = "SELECT user_name, user_id, user_type FROM tbl_user WHERE user_id = %s"
+            cur.execute(query, (user_id,))
+            user = cur.fetchone()
+            cur.close()
+
+            # Teklifi veritabanına kaydet
+            cursor = mysql.connection.cursor()
+            query = "INSERT INTO tbl_teklifler (talep_id, user_id, teklif_miktari, teklif_aciklama, teklif_tarihi) VALUES (%s, %s, %s, %s, %s)"
+            cursor.execute(query, (talep_id, user_id, teklif_miktari, teklif_aciklama, teklif_tarihi))
+            mysql.connection.commit()
+            cursor.close()
+
+            flash("Teklifiniz başarıyla kaydedildi.")
+            return redirect(url_for('tum_talepler'))
+
+        return render_template("frontend/teklif_ver.html", talep_id=talep_id, user=user, ayar=ayarlar)
+    else:
+        return redirect(url_for('login'))
+    
+@app.route("/tekliflerim")
+def tekliflerim():
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM tbl_teklifler WHERE user_id = %s"
+        cursor.execute(query, (user_id,))
+        teklifler = cursor.fetchall()
+        cursor.close()
+
+        return render_template("frontend/tekliflerim.html", teklifler=teklifler, ayar=ayarlar)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/profil')
@@ -331,6 +414,7 @@ def login():
         if user and bcrypt.check_password_hash(user['user_pass'], reg_pass1):
             session['reg_name'] = user['user_name']
             session['user_id'] = user['user_id']
+            session['user_type'] = user['user_type']
             
             if user['admin'] == 1:
                 return redirect(url_for('admin'))
