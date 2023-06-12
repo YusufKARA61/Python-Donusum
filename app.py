@@ -2,6 +2,7 @@ from flask import Flask, redirect, render_template, request, session, url_for, j
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 from datetime import datetime
+from werkzeug.utils import secure_filename
 from flask import flash
 import os
 
@@ -77,7 +78,23 @@ def save_contact():
 
 @app.route("/blog")
 def blog():
-    return render_template("frontend/blog.html", ayar=ayarlar )
+    cursor = mysql.connection.cursor()
+    query = "SELECT tbl_post.*, tbl_category.name AS category_name FROM tbl_post JOIN tbl_category ON tbl_post.category_id = tbl_category.category_id"
+    cursor.execute(query)
+    posts = cursor.fetchall()
+    cursor.close()
+    return render_template("frontend/blog.html", posts=posts, ayar=ayarlar)
+
+@app.route("/blog/<int:post_id>")
+def show_post(post_id):
+    cursor = mysql.connection.cursor()
+    query = "SELECT * FROM tbl_post WHERE post_id = %s"
+    cursor.execute(query, (post_id,))
+    post = cursor.fetchone()
+    cursor.close()
+    return render_template("frontend/post.html", post=post, ayar=ayarlar)
+
+
 
 
 
@@ -199,9 +216,20 @@ def faq():
 @app.route("/admin")
 def admin():
     if 'user_id' in session:
-        return render_template("admin/main.html")
+        user_id = session['user_id']
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM tbl_user WHERE user_id = %s AND admin = 1"
+        cursor.execute(query, (user_id,))
+        user = cursor.fetchone()
+        cursor.close()
+
+        if user:
+            return render_template("admin/main.html")
+        else:
+            return "Yetkisiz erişim!"
     else:
         return redirect(url_for('login'))
+
 
 @app.route("/talep_olustur", methods=["POST"])
 def talep_olustur():
@@ -668,6 +696,64 @@ def projedetay(proje_id):
     else:
         # Kullanıcı girişi yoksa sadece proje detaylarını aktar
         return render_template("frontend/projedetay.html", proje=proje, ayar=ayarlar)
+    
+@app.route('/blogs')
+def blogs():
+    # Veritabanından makale verilerini alın
+    cursor = mysql.connection.cursor()
+    query = "SELECT tbl_post.post_id, tbl_post.title, tbl_post.content, tbl_post.image, tbl_post.created_at, tbl_category.name AS category_name FROM tbl_post JOIN tbl_category ON tbl_post.category_id = tbl_category.category_id"
+    cursor.execute(query)
+    blogs = cursor.fetchall()
+    cursor.close()
+
+    return render_template('admin/blogs.html', blogs=blogs)
+
+
+
+    
+@app.route('/add_post', methods=['GET', 'POST'])
+def add_post():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        category_id = request.form.get('category')
+        content = request.form.get('content')
+        image = request.files['proje_resim']
+        
+        # Resim dosyasını kaydetme işlemi
+        filename = secure_filename(image.filename)
+        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        
+        # Veritabanında makale oluşturma işlemi
+        cursor = mysql.connection.cursor()
+        query = "INSERT INTO tbl_post (title, content, image, category_id) VALUES (%s, %s, %s, %s)"
+        cursor.execute(query, (title, content, filename, category_id))
+        mysql.connection.commit()
+        cursor.close()
+        
+        flash('Makale başarıyla eklendi.')
+        return redirect(url_for('blogs'))
+    
+    # Kategori listesini almak için veritabanından sorgu yapma
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM tbl_category")
+    categories = cursor.fetchall()
+    cursor.close()
+    
+    return render_template('admin/add_post.html', categories=categories)
+
+@app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
+def edit_post(post_id):
+    # Posta ilişkin düzenleme işlemleri burada yapılır
+    # post_id parametresi ile ilgili gönderiyi alabilir ve düzenleme formunu görüntüleyebilirsiniz
+    # GET ve POST işlemlerini yönetmek için gereken kodları buraya ekleyebilirsiniz
+    return render_template('admin/edit_post.html', post_id=post_id)
+
+@app.route('/delete_post/<int:post_id>', methods=['GET', 'POST'])
+def delete_post(post_id):
+    # Posta ilişkin silme işlemleri burada yapılır
+    # post_id parametresi ile ilgili gönderiyi silebilirsiniz
+    # Silme işleminden sonra uygun bir yönlendirme yapabilirsiniz
+    return redirect(url_for('blogs'))
 
 
 
