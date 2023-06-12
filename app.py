@@ -14,6 +14,15 @@ app.config['MYSQL_PASSWORD'] = ""
 app.config['MYSQL_DB'] = "phyevv"
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
+#app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+#app.config['MAIL_PORT'] = 465
+#app.config['MAIL_USERNAME'] = 'your-email@gmail.com'
+#app.config['MAIL_PASSWORD'] = 'your-password'
+#app.config['MAIL_USE_TLS'] = False
+#app.config['MAIL_USE_SSL'] = True
+
+#mail = Mail(app)
+
 # Resimlerin kaydedileceği klasör
 UPLOAD_FOLDER = 'static/admin/img'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -361,11 +370,10 @@ def profil():
 
 
 
-# Mysql Kullanıcı Ekleme
 @app.route('/register', methods=["GET", "POST"])
 def register():
     if request.method == 'GET':
-        return render_template("frontend/register.html" , ayar=ayarlar)
+        return render_template("frontend/register.html", ayar=ayarlar)
     else:
         reg_email = request.form.get('reg_email')
 
@@ -382,21 +390,55 @@ def register():
 
         reg_type = request.form.get('reg_type')
         reg_name = request.form.get('reg_name')
-        reg_tc = request.form.get('reg_tc')
         reg_tel = request.form.get('reg_tel')
-        reg_dogum = request.form.get('reg_dogum')
         reg_pass1 = request.form.get('reg_pass1')
+        reg_pass2 = request.form.get('reg_pass2')
+        activation_code = request.form.get('activation_code')
+
+        if reg_pass1 != reg_pass2:
+            flash('Girilen şifreler uyuşmuyor.')
+            return redirect(url_for('register'))
+
         user_pass = bcrypt.generate_password_hash(reg_pass1).decode('utf-8')
 
         cursor = mysql.connection.cursor()
-        query = "INSERT INTO tbl_user (user_type,  user_name, user_tc, user_tel, user_dogum, user_email, user_pass) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (reg_type, reg_name, reg_tc, reg_tel, reg_dogum, reg_email, user_pass))
+        query = "INSERT INTO tbl_user (user_type, user_name, user_tel, user_email, user_pass, is_active) VALUES (%s, %s, %s, %s, %s, %s)"
+        #activation_code = generate_activation_code()  # Benzersiz bir aktivasyon kodu oluşturun
+        cursor.execute(query, (reg_type, reg_name, reg_tel, reg_email, user_pass, activation_code))
         mysql.connection.commit()
+        user_id = cursor.lastrowid  # Yeni kullanıcının ID'sini alın
         cursor.close()
 
         session['reg_name'] = reg_name
+        session['user_id'] = user_id
+        session['user_type'] = reg_type  # Oturum bilgilerini doğrudan atayın
 
-        return render_template("frontend/main.html", ayar=ayarlar)
+        # E-posta gönderme işlemi
+       # activation_link = url_for('activate_account', activation_code=activation_code, _external=True)
+       # msg = Message("Hesap Aktivasyonu", sender="your-email@gmail.com", recipients=[reg_email])
+       # msg.body = "Hesabınızı etkinleştirmek için aşağıdaki bağlantıya tıklayın: {activation_link}".format(activation_link=activation_link)
+       # mail.send(msg)
+
+        return redirect(url_for('main'))
+
+#@app.route('/activate/<activation_code>')
+#def activate_account(activation_code):
+    #cursor = mysql.connection.cursor()
+    #query = "SELECT * FROM tbl_user WHERE activation_code = %s"
+    #cursor.execute(query, (activation_code,))
+    #user = cursor.fetchone()
+#
+    #if user:
+        # Kullanıcının hesabını etkinleştirin
+       # query = "UPDATE tbl_user SET is_active = 1 WHERE activation_code = %s"
+       # cursor.execute(query, (activation_code,))
+        #mysql.connection.commit()
+        #flash('Hesabınız başarıyla etkinleştirildi. Giriş yapabilirsiniz.')
+   # else:
+       # flash('Geçersiz aktivasyon kodu.')
+
+    #cursor.close()
+   # return redirect(url_for('login'))
 
 # Mysql Kullanıcı Giriş
 @app.route('/login', methods=["GET", "POST"])
@@ -411,20 +453,27 @@ def login():
         user = cursor.fetchone()
         cursor.close()
 
-        if user and bcrypt.check_password_hash(user['user_pass'], reg_pass1):
-            session['reg_name'] = user['user_name']
-            session['user_id'] = user['user_id']
-            session['user_type'] = user['user_type']
+        if user:
+            if user['is_active'] == 0:
+                flash('Hesabınız henüz etkinleştirilmemiş.')
+                return redirect(url_for('login'))
             
-            if user['admin'] == 1:
-                return redirect(url_for('admin'))
-            else:
-                return render_template("frontend/main.html", ayar=ayarlar)
-        else:
-            return "Hatalı giriş bilgileri"
+            if bcrypt.check_password_hash(user['user_pass'], reg_pass1):
+                session['reg_name'] = user['user_name']
+                session['user_id'] = user['user_id']
+                session['user_type'] = user['user_type']
+                
+                if user['admin'] == 1:
+                    return redirect(url_for('admin'))
+                else:
+                    return render_template("frontend/main.html", ayar=ayarlar)
+        
+        flash('Hatalı giriş bilgileri')
+        return redirect(url_for('login'))
 
     else:
         return render_template("frontend/login.html", ayar=ayarlar)
+
 
 
 # Mysql Adres Ekleme

@@ -9,6 +9,15 @@
       <h1 class="hero-heading mb-0 mobcenter">GİRİŞ</h1>
       <div class="row align-items-center">
         <div class="col-lg-6">
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-danger">
+                {% for message in messages %}
+                   {{ message }}
+               {% endfor %}
+            </div>
+          {% endif %}
+      {% endwith %}
           
           
 
@@ -28,6 +37,8 @@
 
             <div class="form-group mobcenter">
               <input type="submit" value="Giriş" class="btn btn-primary" />
+              veya <a href="{{ url_for('register') }}" class="btn btn-primary">Kayıt</a>
+
             </div>
           </form>
         </div>
