@@ -41,11 +41,26 @@ def get_ayarlar():
     ayarlar = cursor.fetchone()
     cursor.close()
 
+# admin.py dosyasından fonksiyonları içe aktar
+from admin.admin import blogs, add_post, edit_post, delete_post, mesajlar, ayarlar, ayar_guncelle, admin, tipprojeler, kullanicilar, kullanici_ekle, proje_ekle
+
+# Admin paneli işlemleri
+app.route('/blogs')(blogs)
+app.route('/add_post', methods=['GET', 'POST'])(add_post)
+app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])(edit_post)
+app.route('/delete_post/<int:post_id>', methods=['GET', 'POST'])(delete_post)
+app.route('/mesajlar')(mesajlar)
+app.route('/ayarlar')(ayarlar)
+app.route('/ayar_guncelle', methods=["POST"])(ayar_guncelle)
+app.route('/admin')(admin)
+app.route('/tipprojeler')(tipprojeler)
+app.route('/kullanicilar')(kullanicilar)
+app.route('/kullaniciekle')(kullanici_ekle)
+app.route('/projeekle', methods=['GET', 'POST'])(proje_ekle)
+
 
 @app.route("/")
 def main():
-    
-
     return render_template("frontend/main.html", ayar=ayarlar)
 
 
@@ -94,29 +109,6 @@ def show_post(post_id):
     cursor.close()
     return render_template("frontend/post.html", post=post, ayar=ayarlar)
 
-
-
-
-
-@app.route("/sorularim")
-def sorularim():
-    if 'user_id' in session:
-        return render_template("frontend/sorularim.html", ayar=ayarlar)
-    else:
-        return redirect(url_for('login'))
-
-@app.route("/mesajlar")
-def mesajlar():
-    if 'user_id' in session:
-        cursor = mysql.connection.cursor()
-        query = "SELECT id, name, email, subject, message, is_read FROM tbl_messages"
-        cursor.execute(query)
-        messages = cursor.fetchall()
-        cursor.close()
-
-        return render_template("admin/mesajlar.html", messages=messages)
-    else:
-        return redirect(url_for('login'))
 
 @app.route("/profilayar")
 def profilayar():
@@ -167,68 +159,9 @@ def taleplerim():
         return redirect(url_for('index'))
 
 
-
-
-
-@app.route("/ayarlar")
-def ayarlar():
-    if 'user_id' in session:
-        return render_template("admin/ayarlar.html", ayar=ayarlar)
-    else:
-        return redirect(url_for('login'))
-
-@app.route('/ayar_guncelle', methods=["POST"])
-def ayar_guncelle():
-    site_name = request.form['site_name']
-    site_title = request.form['site_title']
-    site_logo = request.files['site_logo']
-    google_analytics = request.form['site_analytics']
-    site_instagram = request.form['site_instagram']
-    site_facebook = request.form['site_facebook']
-    site_twiter = request.form['site_twiter']
-    site_youtube = request.form['site_youtube']
-
-    # Resimleri kaydetme işlemi
-    if site_logo:
-        site_logo_filename = site_logo.filename
-        site_logo.save(os.path.join(app.config['UPLOAD_FOLDER'], site_logo_filename))
-    else:
-        site_logo_filename = None
-
-    cursor = mysql.connection.cursor()
-    query = "UPDATE tbl_ayar SET site_name = %s, site_title = %s, site_logo = %s, site_analytics = %s, site_instagram = %s, site_facebook = %s, site_twiter = %s, site_youtube = %s WHERE id = 1"
-    cursor.execute(query, (site_name, site_title, site_logo_filename, google_analytics, site_instagram, site_facebook, site_twiter, site_youtube))
-    mysql.connection.commit()
-    cursor.close()
-
-    return redirect(url_for('ayarlar'))
-
-
-
-@app.route("/donusum")
-def donusum():
-    return render_template("frontend/donusum.html")
-
 @app.route("/faq")
 def faq():
     return render_template("frontend/faq.html" , ayar=ayarlar)
-
-@app.route("/admin")
-def admin():
-    if 'user_id' in session:
-        user_id = session['user_id']
-        cursor = mysql.connection.cursor()
-        query = "SELECT * FROM tbl_user WHERE user_id = %s AND admin = 1"
-        cursor.execute(query, (user_id,))
-        user = cursor.fetchone()
-        cursor.close()
-
-        if user:
-            return render_template("admin/main.html")
-        else:
-            return "Yetkisiz erişim!"
-    else:
-        return redirect(url_for('login'))
 
 
 @app.route("/talep_olustur", methods=["POST"])
@@ -504,143 +437,12 @@ def login():
 
 
 
-# Mysql Adres Ekleme
-@app.route('/hesap', methods=["GET", "POST"])
-def hesap():
-    if request.method == 'GET':
-        return render_template("frontend/hesap.html")
-    else:
-        user_id = request.form.get('user_id')
-        reg_tc = request.form.get('reg_tc')
-        reg_tel = request.form.get('reg_tel')
-        reg_mahalle = request.form.get('reg_mahalle')
-        reg_sokak = request.form.get('reg_sokak')
-        reg_kapino = request.form.get('reg_kapino')
-        reg_ickapino = request.form.get('reg_ickapino')
-        reg_ada = request.form.get('reg_ada')
-        reg_parsel = request.form.get('reg_parsel')
-
-        # Sadece oturum açmış kullanıcının kimliğini alın
-        user_id = session['user_id']
-
-        cursor = mysql.connection.cursor()
-        query = "INSERT INTO tbl_talep (user_id, user_tc, user_tel, user_mahalle, user_sokak, user_kapino, user_ickapino, user_ada, user_parsel) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (user_id, reg_tc, reg_tel, reg_mahalle, reg_sokak, reg_kapino, reg_ickapino, reg_ada, reg_parsel))
-        mysql.connection.commit()
-        cursor.close()
-
-        # Eklenen veriyi almak için yeni bir sorgu yapın
-        query = "SELECT * FROM tbl_talep WHERE user_id = %s"
-        cursor = mysql.connection.cursor()
-        cursor.execute(query, (user_id,))
-        basvurular = cursor.fetchall()
-        cursor.close()
-
-        return render_template("frontend/basvurularim.html", basvurular=basvurular)
-
-
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for('main'))
 
 
-@app.route("/tipprojeler")
-def tipprojeler():
-    if 'user_id' in session:
-        conn = mysql.connection
-        cursor = conn.cursor()
-
-        cursor.execute("SELECT * FROM tbl_proje")
-        data = cursor.fetchall()
-
-        cursor.close()
-
-        if data:
-            return render_template("admin/tipprojeler.html", data=data)
-        else:
-            message = "Veri bulunamadı."
-            return render_template("admin/tipprojeler.html", message=message)
-    else:
-        return redirect(url_for('login'))
-
-    
-@app.route("/basvurularim")
-def basvurularim():
-    if 'user_id' in session:
-        user_id = session['user_id']
-
-        cursor = mysql.connection.cursor()
-        query = "SELECT * FROM tbl_talep WHERE user_id = %s"
-        cursor.execute(query, (user_id,))
-        basvurularim = cursor.fetchall()
-
-        return render_template("frontend/basvurularim.html", basvurularim=basvurularim, ayar=ayarlar)
-    else:
-        return redirect(url_for('login'))
-
-    
-@app.route("/kullanicilar")
-def kullanicilar():
-    if 'user_id' in session:
-        # Veritabanı bağlantısını yap
-        conn = mysql.connection
-        cursor = conn.cursor()
-
-        # Verileri sorgula
-        cursor.execute("SELECT * FROM tbl_user")
-        data = cursor.fetchall()
-
-        # Veritabanı bağlantısını kapat
-        cursor.close()
-
-        if data:
-            # Verileri şablonla birlikte gönder
-            return render_template("admin/kullanicilar.html", data=data)
-        else:
-            # Veri bulunamadı durumunda mesaj gönder
-            message = "Veri bulunamadı."
-            return render_template("admin/kullanicilar.html", message=message)
-    else:
-        # Kullanıcı girişi yapılmamışsa login sayfasına yönlendir
-        return redirect(url_for('login'))
-    
-@app.route("/kullaniciekle")
-def kullanici_ekle():
-    return render_template("admin/kullanici_ekle.html")
-
-@app.route("/projeekle", methods=['GET', 'POST'])
-def proje_ekle():
-    if request.method == 'POST':
-        # Formdan gelen verileri al
-        proje_adi = request.form.get('proje_adi')
-        yapi_sinifi = request.form.get('yapi_sinifi')
-        oda_sayisi = request.form.getlist('oda_sayisi')
-        kat_sayisi = request.form.get('kat_sayisi')
-        ev_metrekare = request.form.get('ev_metrekare')
-        proje_resim = request.files['proje_resim']
-
-        # Resimleri kaydetme işlemi
-        if proje_resim:
-            proje_resim_filename = proje_resim.filename
-            proje_resim.save(os.path.join(app.config['UPLOAD_FOLDER'], proje_resim_filename))
-        else:
-            proje_resim_filename = None
-
-        # Veritabanına verileri kaydet
-        cursor = mysql.connection.cursor()
-        query = "INSERT INTO tbl_proje (proje_adi, proje_yapi_sinifi, proje_oda_sayisi, proje_kat_adet, proje_metre, proje_resim) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (proje_adi, yapi_sinifi, oda_sayisi, kat_sayisi, ev_metrekare, proje_resim_filename)
-        cursor.execute(query, values)
-        mysql.connection.commit()
-        cursor.close()
-
-        # Başarılı bir şekilde kaydedildi mesajını döndür
-        message = "Proje başarıyla kaydedildi."
-        return render_template("admin/proje_ekle.html", message=message)
-
-    # POST isteği değilse veya form gönderilmemişse sayfayı normal şekilde render et
-    return render_template("admin/proje_ekle.html")
 
 @app.route("/projeler", methods=['GET'])
 def projeler():
@@ -696,66 +498,6 @@ def projedetay(proje_id):
     else:
         # Kullanıcı girişi yoksa sadece proje detaylarını aktar
         return render_template("frontend/projedetay.html", proje=proje, ayar=ayarlar)
-    
-@app.route('/blogs')
-def blogs():
-    # Veritabanından makale verilerini alın
-    cursor = mysql.connection.cursor()
-    query = "SELECT tbl_post.post_id, tbl_post.title, tbl_post.content, tbl_post.image, tbl_post.created_at, tbl_category.name AS category_name FROM tbl_post JOIN tbl_category ON tbl_post.category_id = tbl_category.category_id"
-    cursor.execute(query)
-    blogs = cursor.fetchall()
-    cursor.close()
-
-    return render_template('admin/blogs.html', blogs=blogs)
-
-
-
-    
-@app.route('/add_post', methods=['GET', 'POST'])
-def add_post():
-    if request.method == 'POST':
-        title = request.form.get('title')
-        category_id = request.form.get('category')
-        content = request.form.get('content')
-        image = request.files['proje_resim']
-        
-        # Resim dosyasını kaydetme işlemi
-        filename = secure_filename(image.filename)
-        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        
-        # Veritabanında makale oluşturma işlemi
-        cursor = mysql.connection.cursor()
-        query = "INSERT INTO tbl_post (title, content, image, category_id) VALUES (%s, %s, %s, %s)"
-        cursor.execute(query, (title, content, filename, category_id))
-        mysql.connection.commit()
-        cursor.close()
-        
-        flash('Makale başarıyla eklendi.')
-        return redirect(url_for('blogs'))
-    
-    # Kategori listesini almak için veritabanından sorgu yapma
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM tbl_category")
-    categories = cursor.fetchall()
-    cursor.close()
-    
-    return render_template('admin/add_post.html', categories=categories)
-
-@app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
-def edit_post(post_id):
-    # Posta ilişkin düzenleme işlemleri burada yapılır
-    # post_id parametresi ile ilgili gönderiyi alabilir ve düzenleme formunu görüntüleyebilirsiniz
-    # GET ve POST işlemlerini yönetmek için gereken kodları buraya ekleyebilirsiniz
-    return render_template('admin/edit_post.html', post_id=post_id)
-
-@app.route('/delete_post/<int:post_id>', methods=['GET', 'POST'])
-def delete_post(post_id):
-    # Posta ilişkin silme işlemleri burada yapılır
-    # post_id parametresi ile ilgili gönderiyi silebilirsiniz
-    # Silme işleminden sonra uygun bir yönlendirme yapabilirsiniz
-    return redirect(url_for('blogs'))
-
-
 
 
 if __name__ == '__main__':

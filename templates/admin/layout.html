@@ -81,13 +81,54 @@
       <div id="sidebar" class="sidebar py-3">
         <div class="text-gray-400 text-uppercase px-3 px-lg-4 py-4 font-weight-bold small headings-font-family">Menü</div>
         <ul class="sidebar-menu list-unstyled">
-              <li class="sidebar-list-item"><a href="admin" class="sidebar-link text-muted active"><i class="o-home-1 mr-3 text-gray"></i><span>Anasayfa</span></a></li>
-              <li class="sidebar-list-item"><a href="kullanicilar" class="sidebar-link text-muted"><i class="o-table-content-1 mr-3 text-gray"></i><span>Kullanıcılar</span></a></li>
-              <li class="sidebar-list-item"><a href="tipprojeler" class="sidebar-link text-muted"><i class="o-table-content-1 mr-3 text-gray"></i><span>Projeler</span></a></li>
-              <li class="sidebar-list-item"><a href="blogs" class="sidebar-link text-muted"><i class="o-table-content-1 mr-3 text-gray"></i><span>Blog</span></a></li>
-              <li class="sidebar-list-item"><a href="mesajlar" class="sidebar-link text-muted"><i class="o-table-content-1 mr-3 text-gray"></i><span>Mesajlar</span></a></li>
-              <li class="sidebar-list-item"><a href="ayarlar" class="sidebar-link text-muted"><i class="o-table-content-1 mr-3 text-gray"></i><span>Genel Ayarlar</span></a></li>
+          <li class="sidebar-list-item">
+            <a id="anasayfa-link" href="admin" class="sidebar-link text-muted menu-link">
+              <i class="o-home-1 mr-3 text-gray"></i>
+              <span>Anasayfa</span>
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a id="kullanicilar-link" href="kullanicilar" class="sidebar-link text-muted menu-link">
+              <i class="o-table-content-1 mr-3 text-gray"></i>
+              <span>Kullanıcılar</span>
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a id="tipprojeler-link" href="tipprojeler" class="sidebar-link text-muted menu-link">
+              <i class="o-table-content-1 mr-3 text-gray"></i>
+              <span>Projeler</span>
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a id="blogs-link" href="blogs" class="sidebar-link text-muted menu-link">
+              <i class="o-table-content-1 mr-3 text-gray"></i>
+              <span>Blog</span>
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a id="mesajlar-link" href="mesajlar" class="sidebar-link text-muted menu-link">
+              <i class="o-table-content-1 mr-3 text-gray"></i>
+              <span>Mesajlar</span>
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="#" data-toggle="collapse" data-target="#pages" aria-expanded="false" aria-controls="pages" class="sidebar-link text-muted">
+              <i class="o-wireframe-1 mr-3 text-gray"></i>
+              <span>Genel Ayarlar</span>
+            </a>
+            <div id="pages" class="collapse">
+              <ul class="sidebar-menu list-unstyled border-left border-primary border-thick">
+                <li class="sidebar-list-item">
+                  <a id="ayarlar-link" href="ayarlar" class="sidebar-link text-muted pl-lg-5 menu-link">Site Ayarları</a>
+                </li>
+                <li class="sidebar-list-item">
+                  <a href="#" class="sidebar-link text-muted pl-lg-5 menu-link">Mail Ayarları</a>
+                </li>
+              </ul>
+            </div>
+          </li>
         </ul>
+        
       </div>
 
 
@@ -129,6 +170,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="{{ url_for('static', filename='admin/js/charts-home.js')}}"></script>
     <script src="{{ url_for('static', filename='admin/js/front.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/js/custom.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
   </body>

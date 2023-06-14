@@ -45,5 +45,3 @@ function confirmDelete() {
     }
 }
 
-
-Cookies.set('active', 'true');
