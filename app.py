@@ -42,7 +42,7 @@ def get_ayarlar():
     cursor.close()
 
 # admin.py dosyasından fonksiyonları içe aktar
-from admin.admin import blogs, add_post, edit_post, delete_post, mesajlar, ayarlar, ayar_guncelle, admin, tipprojeler, kullanicilar, kullanici_ekle, proje_ekle
+from admin.admin import blogs, add_post, edit_post, delete_post, mesajlar, ayarlar, ayar_guncelle, admin, tipprojeler, kullanicilar, kullanici_ekle, proje_ekle, sil_proje
 
 # Admin paneli işlemleri
 app.route('/blogs')(blogs)
@@ -57,10 +57,12 @@ app.route('/tipprojeler')(tipprojeler)
 app.route('/kullanicilar')(kullanicilar)
 app.route('/kullaniciekle')(kullanici_ekle)
 app.route('/projeekle', methods=['GET', 'POST'])(proje_ekle)
+app.route('/sil_proje/<int:proje_id>', methods=["POST"])(sil_proje)
+
 
 
 @app.route("/")
-def ana_sayfa():
+def main():
     # Kullanıcının çerezleri kabul etmiş olup olmadığını kontrol edin
     if "cookies_kabul_edildi" in session:
         cookies_kabul_edildi = session["cookies_kabul_edildi"]

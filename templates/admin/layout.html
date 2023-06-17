@@ -67,7 +67,7 @@
           <ul class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-primary navbar-btn ml-0 ml-lg-3"><img src="{{ url_for('static', filename='admin/img/avatar-6.jpg') }}" alt="Jason Doe" style="max-width: 2.5rem;" class="img-fluid rounded-circle shadow"> {{ session['reg_name'] }}</a>
             <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">{{ session['reg_name'] }}</strong></a>
               <div class="dropdown-divider"></div><a href="profil" class="dropdown-item">Profil</a>
-              <div class="dropdown-divider"></div><a href="logout" class="dropdown-item">Çıkış</a>
+              <div class="dropdown-divider"></div><a href="{{ url_for('logout') }}" class="dropdown-item">Çıkış</a>
             </div>
           </ul>
         </ul>

@@ -254,6 +254,37 @@ def kullanicilar():
 def kullanici_ekle():
     return render_template("admin/kullanici_ekle.html")
 
+@app.route("/sil_proje/<int:proje_id>", methods=["POST"])
+def sil_proje(proje_id):
+    if 'user_id' in session:
+        user_id = session['user_id']
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM tbl_user WHERE user_id = %s AND admin = 1"
+        cursor.execute(query, (user_id,))
+        user = cursor.fetchone()
+        cursor.close()
+        
+        if user:
+            # Admin kullanıcısı
+            if request.method == "POST":
+                # Proje silme işlemini gerçekleştir
+                cursor = mysql.connection.cursor()
+                query = "DELETE FROM tbl_proje WHERE proje_id = %s"
+                cursor.execute(query, (proje_id,))
+                mysql.connection.commit()
+                cursor.close()
+                flash("Proje başarıyla silindi.", "success")
+                return redirect(url_for("main"))
+                
+            return render_template("tipprojeler.html", proje_id=proje_id)
+        else:
+            flash("Bu işlemi gerçekleştirmek için yetkiniz yok.", "danger")
+            return redirect(url_for("tipprojeler"))
+    else:
+        flash("Bu işlemi gerçekleştirmek için giriş yapmalısınız.", "danger")
+        return redirect(url_for("login"))
+
+
 
 
 
