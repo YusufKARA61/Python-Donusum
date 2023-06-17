@@ -13,7 +13,7 @@
     
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/vendor/bootstrap/css/bootstrap.min.css') }}">
     <!-- Font Awesome CSS-->
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/vendor/font-awesome/css/font-awesome.min.css') }}" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/vendor/font-awesome/css/font-awesome.min.css') }}">
     <!-- Google fonts - Popppins for copy-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,800">
     <!-- orion icons-->
@@ -23,7 +23,7 @@
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/css/custom.css') }}">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='admin/img/favicon.png') }}">
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -31,7 +31,7 @@
   <body>
     <!-- navbar-->
     <header class="header">
-      <nav class="navbar navbar-expand-lg px-4 py-2 bg-white shadow"><a href="/" class="sidebar-toggler text-gray-500 mr-4 mr-lg-5 lead"><i class="fas fa-align-left"></i></a><a href="admin" class="navbar-brand font-weight-bold text-uppercase text-base">Yönetim Ekranı</a>
+      <nav class="navbar navbar-expand-lg px-4 py-2 bg-white shadow"><a href="/" class="sidebar-toggler text-gray-500 mr-4 mr-lg-5 lead"><img src="{{ url_for('static', filename='front/img/logo.png') }}" alt="" class="img-fluid" width="200" height="100"></a><a href="admin" class="navbar-brand font-weight-bold text-uppercase text-base">Yönetim Ekranı</a>
         <ul class="ml-auto d-flex align-items-center list-unstyled mb-0">
          
           <li class="nav-item dropdown mr-3"><a id="notifications" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle text-gray-400 px-1"><i class="fa fa-bell"></i><span class="notification-icon"></span>Bildirim</a>
@@ -89,31 +89,31 @@
           </li>
           <li class="sidebar-list-item">
             <a id="kullanicilar-link" href="kullanicilar" class="sidebar-link text-muted menu-link">
-              <i class="o-table-content-1 mr-3 text-gray"></i>
+              <i class="o-user-1 mr-3 text-gray"></i>
               <span>Kullanıcılar</span>
             </a>
           </li>
           <li class="sidebar-list-item">
             <a id="tipprojeler-link" href="tipprojeler" class="sidebar-link text-muted menu-link">
-              <i class="o-table-content-1 mr-3 text-gray"></i>
+              <i class="o-survey-1 mr-3 text-gray"></i>
               <span>Projeler</span>
             </a>
           </li>
           <li class="sidebar-list-item">
             <a id="blogs-link" href="blogs" class="sidebar-link text-muted menu-link">
-              <i class="o-table-content-1 mr-3 text-gray"></i>
+              <i class="o-paper-stack-1 mr-3 text-gray"></i>
               <span>Blog</span>
             </a>
           </li>
           <li class="sidebar-list-item">
             <a id="mesajlar-link" href="mesajlar" class="sidebar-link text-muted menu-link">
-              <i class="o-table-content-1 mr-3 text-gray"></i>
+              <i class="o-contact-card-1 mr-3 text-gray"></i>
               <span>Mesajlar</span>
             </a>
           </li>
           <li class="sidebar-list-item">
             <a href="#" data-toggle="collapse" data-target="#pages" aria-expanded="false" aria-controls="pages" class="sidebar-link text-muted">
-              <i class="o-wireframe-1 mr-3 text-gray"></i>
+              <i class="o-settings-window-1 mr-3 text-gray"></i>
               <span>Genel Ayarlar</span>
             </a>
             <div id="pages" class="collapse">
@@ -126,6 +126,25 @@
                 </li>
               </ul>
             </div>
+            
+          </li>
+          <li class="sidebar-list-item">
+            <a href="#" data-toggle="collapse" data-target="#pages" aria-expanded="false" aria-controls="pages" class="sidebar-link text-muted">
+              <i class="o-wireframe-1 mr-3 text-gray"></i>
+              <span>Sayfalar</span>
+            </a>
+            <div id="pages" class="collapse">
+              <ul class="sidebar-menu list-unstyled border-left border-primary border-thick">
+                
+                <li class="sidebar-list-item">
+                  <a href="hakkimiz" class="sidebar-link text-muted pl-lg-5 menu-link">Hakkımızda</a>
+                </li>
+                <li class="sidebar-list-item">
+                  <a href="kulsoz" class="sidebar-link text-muted pl-lg-5 menu-link">Kullanıcı Sözleşmesi</a>
+                </li>
+              </ul>
+            </div>
+            
           </li>
         </ul>
         
@@ -165,12 +184,12 @@
     <script src="{{ url_for('static', filename='admin/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/vendor/popper.js/umd/popper.min.js') }} "> </script>
     <script src="{{ url_for('static', filename='admin/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='admin/vendor/jquery.cookie/jquery.cookie.js') }}"> </script>
+    <script src="{{ url_for('static', filename='admin/vendor/jquery.cookie/jquery.cookie.js')}}"> </script>
     <script src="{{ url_for('static', filename='admin/vendor/chart.js/Chart.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="{{ url_for('static', filename='admin/js/charts-home.js')}}"></script>
-    <script src="{{ url_for('static', filename='admin/js/front.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/js/custom.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/js/front.js')}}"></script>
+    <script src="{{ url_for('static', filename='admin/js/custom.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
   </body>

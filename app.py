@@ -60,8 +60,22 @@ app.route('/projeekle', methods=['GET', 'POST'])(proje_ekle)
 
 
 @app.route("/")
-def main():
-    return render_template("frontend/main.html", ayar=ayarlar)
+def ana_sayfa():
+    # Kullanıcının çerezleri kabul etmiş olup olmadığını kontrol edin
+    if "cookies_kabul_edildi" in session:
+        cookies_kabul_edildi = session["cookies_kabul_edildi"]
+    else:
+        cookies_kabul_edildi = False
+
+    return render_template("frontend/main.html", ayar=ayarlar, cookies_kabul_edildi=cookies_kabul_edildi)
+
+@app.route("/cookies_kabul_et", methods=["POST"])
+def cookies_kabul_et():
+    # Kullanıcının çerezleri kabul ettiğini belirten bir oturum değişkeni ayarlayın
+    session["cookies_kabul_edildi"] = True
+
+    # Ana sayfaya yönlendir
+    return redirect("/")
 
 
 

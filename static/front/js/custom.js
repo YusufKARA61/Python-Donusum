@@ -31,4 +31,18 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+  var cookieConsent = document.getElementById("cookie-consent");
+  var cookieConsentButton = document.querySelector("#cookie-consent button");
+  
+  // Çerezleri kabul etme butonuna tıklandığında pop-up'ı gizle
+  cookieConsentButton.addEventListener("click", function() {
+    cookieConsent.style.display = "none";
+  });
+  
+  // Sayfa yüklendiğinde pop-up'ı göster
+  cookieConsent.style.display = "block";
+});
+
+
 

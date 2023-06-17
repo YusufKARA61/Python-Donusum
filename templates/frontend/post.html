@@ -3,7 +3,14 @@
 
 
 {% block icerik %} 
-
+<section class="hero">
+  <div class="container text-center">
+    <!-- breadcrumb-->
+  
+    <h1 class="hero-heading">{{ post['title'] }}</h1>
+   
+  </div>
+</section>
 <section class="py-5">
   <div class="container">
     <div class="row gy-5">
@@ -12,7 +19,6 @@
       <!-- Latest Posts -->
       <main class="col-lg-8"> 
         <div class="container">
-          <h1 class="mb-4">{{ post['title'] }}<a href="!#"></a></h1>
 
           <div class="post-body">
             <p class="mb-4"><img class="img-fluid" src="{{ url_for('static', filename='admin/img/' + post.image) }}"></p>

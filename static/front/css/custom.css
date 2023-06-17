@@ -25,3 +25,29 @@
         background-color: #38b6ff;
     }
     
+    #cookie-consent {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        bottom: 20px;
+        right: 20px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+      
+      #cookie-consent p {
+        margin: 0 0 10px;
+      }
+      
+      #cookie-consent button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      
