@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from flask import flash
-import os
+import os 
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -32,7 +32,7 @@ mysql = MySQL(app)
 
 ayarlar = None
 
-@app.before_first_request
+@app.before_request
 def get_ayarlar():
     global ayarlar
 
