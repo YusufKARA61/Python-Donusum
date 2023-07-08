@@ -39,10 +39,10 @@ def admin():
     else:
         return redirect(url_for('login'))
     
-@app.route("/ayarlar")
-def ayarlar():
+@app.route("/ayarlarim")
+def ayarlarim():
     if 'user_id' in session:
-        return render_template("admin/ayarlar.html", ayar=ayarlar)
+        return render_template("admin/ayarlar.html", ayar=ayarlarim)
     else:
         return redirect(url_for('login'))
 

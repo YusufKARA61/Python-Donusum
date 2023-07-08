@@ -42,7 +42,7 @@ def get_ayarlar():
     cursor.close()
 
 # admin.py dosyasından fonksiyonları içe aktar
-from admin.admin import blogs, add_post, edit_post, delete_post, mesajlar, ayarlar, ayar_guncelle, admin, tipprojeler, kullanicilar, kullanici_ekle, proje_ekle, sil_proje
+from admin.admin import blogs, add_post, edit_post, delete_post, mesajlar, ayarlarim, ayar_guncelle, admin, tipprojeler, kullanicilar, kullanici_ekle, proje_ekle, sil_proje
 
 # Admin paneli işlemleri
 app.route('/blogs')(blogs)
@@ -50,7 +50,7 @@ app.route('/add_post', methods=['GET', 'POST'])(add_post)
 app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])(edit_post)
 app.route('/delete_post/<int:post_id>', methods=['GET', 'POST'])(delete_post)
 app.route('/mesajlar')(mesajlar)
-app.route('/ayarlar')(ayarlar)
+app.route('/ayarlarim')(ayarlarim)
 app.route('/ayar_guncelle', methods=["POST"])(ayar_guncelle)
 app.route('/admin')(admin)
 app.route('/tipprojeler')(tipprojeler)
